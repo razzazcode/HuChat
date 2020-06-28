@@ -140,17 +140,17 @@ public class GroupChatActivity extends AppCompatActivity
         UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    currentUserName = dataSnapshot.child("name").getValue().toString();
-                }
-            }
+ {
+     if (dataSnapshot.exists())
+     {
+         currentUserName = dataSnapshot.child("name").getValue().toString();
+     }
+ }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+ @Override
+ public void onCancelled(DatabaseError databaseError) {
 
-            }
+ }
         });
     }
 

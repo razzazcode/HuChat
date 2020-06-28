@@ -167,7 +167,7 @@ checker="pdf";
 
 
  intent.setAction(Intent.ACTION_GET_CONTENT);
- intent.setType("application/pdf*");
+ intent.setType("application/pdf");
  startActivityForResult(intent.createChooser(intent, "Select pdf file"), 435);
 
 
@@ -185,7 +185,7 @@ Intent intent = new Intent();
 
 
 intent.setAction(Intent.ACTION_GET_CONTENT);
-intent.setType("application/msword*");
+intent.setType("application/msword");
 startActivityForResult(intent.createChooser(intent, "Select Ms Word File"), 435);
 
 

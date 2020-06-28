@@ -88,7 +88,7 @@
                 android:textAllCaps="false"
                 android:textSize="24sp"
                 android:textColor="@android:color/background_light"
-                android:background="@drawable/buttons"
+                android:background="@color/colorPrimary"
                 />
 
             <TextView
@@ -135,7 +135,7 @@
                 android:textAllCaps="false"
                 android:textSize="14sp"
                 android:textColor="@android:color/background_light"
-                android:background="@drawable/buttons"
+                android:background="@color/colorPrimary"
                 android:drawableStart="@drawable/phone"
                 />
 
