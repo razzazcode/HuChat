@@ -14,9 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.iid.FirebaseInstanceId;
@@ -72,7 +74,7 @@ public class RegisterActivity extends AppCompatActivity
     private void CreateNewAccount()
     {
         String email = UserEmail.getText().toString();
-        String password = UserPassword.getText().toString();
+        final String password = UserPassword.getText().toString();
 
         if (TextUtils.isEmpty(email))
         {
@@ -89,7 +91,13 @@ public class RegisterActivity extends AppCompatActivity
             loadingBar.setCanceledOnTouchOutside(true);
             loadingBar.show();
 
-            mAuth.createUserWithEmailAndPassword(email, password)
+
+            checkEmailExistsOrNot();
+
+
+
+
+         /*   mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task)
@@ -104,23 +112,27 @@ public class RegisterActivity extends AppCompatActivity
 
                                 String emailtoken = UserEmail.getText().toString();
 
+String passwordOfUser = UserPassword.getText().toString();
+
+          RootRef.child("Users").child(currentUserID).child("device_token")
+          .setValue(emailtoken);
 
 
-                                RootRef.child("Users").child(currentUserID).child("device_token")
-                                        .setValue(emailtoken);
+  RootRef.child("Users").child(currentUserID).child("userPassword")
+          .setValue(passwordOfUser);
 
-                                SendUserToMainActivity();
-                                Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
-                            else
-                            {
-                                String message = task.getException().toString();
-                                Toast.makeText(RegisterActivity.this, "Error : " + message, Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                            }
-                        }
-                    });
+  SendUserToMainActivity();
+  Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+          loadingBar.dismiss();
+      }
+      else
+      {
+          String message = task.getException().toString();
+          Toast.makeText(RegisterActivity.this, "Error : " + message, Toast.LENGTH_SHORT).show();
+          loadingBar.dismiss();
+      }
+  }
+                    }); */
         }
     }
 
@@ -151,6 +163,75 @@ public class RegisterActivity extends AppCompatActivity
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();
+    }
+
+
+
+    private void checkEmailExistsOrNot(){
+        mAuth.fetchSignInMethodsForEmail(UserEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                if (task.getResult().getSignInMethods().size() == 0){
+                    // email not existed
+                    String email = UserEmail.getText().toString();
+                    final String password = UserPassword.getText().toString();
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task)
+                                {
+                                    if (task.isSuccessful())
+                                    {
+                                        // String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                                        String currentUserID = mAuth.getCurrentUser().getUid();
+                                        RootRef.child("Users").child(currentUserID).setValue("");
+
+
+                                        String emailtoken = UserEmail.getText().toString();
+
+                                        String passwordOfUser = UserPassword.getText().toString();
+
+                                        RootRef.child("Users").child(currentUserID).child("device_token")
+                                                .setValue(emailtoken);
+
+
+                                        RootRef.child("Users").child(currentUserID).child("userPassword")
+                                                .setValue(passwordOfUser);
+
+                                        SendUserToMainActivity();
+                                        Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+                                        loadingBar.dismiss();
+                                    }
+                                    else
+                                    {
+                                        String message = task.getException().toString();
+                                        Toast.makeText(RegisterActivity.this, "Error : " + message, Toast.LENGTH_SHORT).show();
+                                        loadingBar.dismiss();
+                                    }
+                                }
+                            });
+
+
+
+
+                }else {
+                    // email existed
+
+
+                    Toast.makeText(RegisterActivity.this, "Error : EMAIL IS ALREADY IN USE ", Toast.LENGTH_SHORT).show();
+                    loadingBar.dismiss();
+
+
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

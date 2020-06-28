@@ -87,6 +87,14 @@ public class LoginActivity extends AppCompatActivity
         {
             SendUserToMainActivity();
         }
+
+        else {
+
+
+            Toast.makeText(this, "Please create account...", Toast.LENGTH_SHORT).show();
+
+
+        }
     }
 
 

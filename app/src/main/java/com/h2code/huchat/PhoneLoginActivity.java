@@ -19,6 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +31,7 @@ public class PhoneLoginActivity extends AppCompatActivity
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
     private FirebaseAuth mAuth;
+    private DatabaseReference RootRef;
 
     private ProgressDialog loadingBar;
 
@@ -44,6 +47,7 @@ public class PhoneLoginActivity extends AppCompatActivity
 
 
         mAuth = FirebaseAuth.getInstance();
+        RootRef = FirebaseDatabase.getInstance().getReference();
 
 
         SendVerificationCodeButton = (Button) findViewById(R.id.send_ver_code_button);
@@ -101,8 +105,18 @@ public class PhoneLoginActivity extends AppCompatActivity
                     loadingBar.setCanceledOnTouchOutside(false);
                     loadingBar.show();
 
+
                     PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, verificationCode);
+
+
                     signInWithPhoneAuthCredential(credential);
+
+
+
+
+
+
+
                 }
             }
         });
@@ -160,6 +174,12 @@ public class PhoneLoginActivity extends AppCompatActivity
                             loadingBar.dismiss();
                             Toast.makeText(PhoneLoginActivity.this, "Congratulations, you're logged in successfully...", Toast.LENGTH_SHORT).show();
                             SendUserToMainActivity();
+
+
+
+
+
+
                         }
                         else
                         {
@@ -175,8 +195,34 @@ public class PhoneLoginActivity extends AppCompatActivity
 
     private void SendUserToMainActivity()
     {
+
+
+saveuserinfo();
+
+
+
         Intent mainIntent = new Intent(PhoneLoginActivity.this, MainActivity.class);
         startActivity(mainIntent);
         finish();
     }
+
+
+    private void saveuserinfo(){
+
+        String currentUserID = mAuth.getCurrentUser().getUid();
+        String verificationCode = InputVerificationCode.getText().toString();
+
+        RootRef.child("Users").child(currentUserID).child("userVerCode")
+                .setValue(verificationCode);
+
+        String phoneNumber = InputPhoneNumber.getText().toString();
+
+        RootRef.child("Users").child(currentUserID).child("userphone")
+                .setValue(phoneNumber);
+
+
+}
+
+
+
 }
