@@ -231,8 +231,10 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
                         {
                             if (task.isSuccessful())
                             {
-                                SendUserToMainActivity();
                                 Toast.makeText(SettingsActivity.this, "Profile Updated Successfully...", Toast.LENGTH_SHORT).show();
+
+
+                                SendUserToMainActivity();
                             }
                             else
                             {

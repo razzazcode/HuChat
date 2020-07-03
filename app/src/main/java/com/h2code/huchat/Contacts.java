@@ -1,7 +1,7 @@
 package com.h2code.huchat;
 
 public class Contacts {
-    public String name, status, image;
+    public String name, status, image ,notificationKey;
 
     public Contacts()
     {
@@ -13,6 +13,17 @@ public class Contacts {
         this.status = status;
         this.image = image;
     }
+
+
+
+    public String getNotificationKey() {
+        return notificationKey;
+    }
+    public void setNotificationKey(String notificationKey) {
+        this.notificationKey = notificationKey;
+    }
+
+
 
     public String getName() {
         return name;

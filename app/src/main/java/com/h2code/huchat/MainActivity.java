@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+//import com.onesignal.OneSignal;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,6 +50,28 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+FirebaseApp.initializeApp(MainActivity.this);
+/*
+
+
+        OneSignal.startInit(this).init();
+        OneSignal.setSubscription(true);
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("notificationKey").setValue(userId);
+            }
+        });
+        OneSignal.setInFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification);
+
+*/
+
+
+
+
+
+
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -160,6 +184,9 @@ public class MainActivity extends AppCompatActivity
 
         if (item.getItemId() == R.id.main_logout_option)
         {
+           // OneSignal.setSubscription(false);
+
+
             updateUserStatus("offline");
             mAuth.signOut();
             SendUserToLoginActivity();
@@ -222,7 +249,7 @@ public class MainActivity extends AppCompatActivity
 
     private void CreateNewGroup(final String groupName)
     {
-        RootRef.child("Groups").child(groupName).setValue("")
+        RootRef.child("Groups").child(currentUserID).child(groupName).setValue("")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)

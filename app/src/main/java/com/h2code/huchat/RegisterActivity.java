@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegisterActivity extends AppCompatActivity
@@ -172,36 +173,50 @@ String passwordOfUser = UserPassword.getText().toString();
             @Override
             public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
                 if (task.getResult().getSignInMethods().size() == 0){
-                    // email not existed
-                    String email = UserEmail.getText().toString();
-                    final String password = UserPassword.getText().toString();
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task)
-                                {
-                                    if (task.isSuccessful())
-                                    {
-                                        // String deviceToken = FirebaseInstanceId.getInstance().getToken();
+           // email not existed
+           String email = UserEmail.getText().toString();
+           final String password = UserPassword.getText().toString();
+           mAuth.createUserWithEmailAndPassword(email, password)
+                   .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                       @Override
+                       public void onComplete(@NonNull Task<AuthResult> task)
+                       {
+       if (task.isSuccessful())
+       {
+   String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                                        String currentUserID = mAuth.getCurrentUser().getUid();
-                                        RootRef.child("Users").child(currentUserID).setValue("");
-
-
-                                        String emailtoken = UserEmail.getText().toString();
-
-                                        String passwordOfUser = UserPassword.getText().toString();
-
-                                        RootRef.child("Users").child(currentUserID).child("device_token")
-                                                .setValue(emailtoken);
+  String currentUserID = mAuth.getCurrentUser().getUid();
+  RootRef.child("Users").child(currentUserID).setValue("");
 
 
-                                        RootRef.child("Users").child(currentUserID).child("userPassword")
-                                                .setValue(passwordOfUser);
+  String emailtoken = UserEmail.getText().toString();
 
-                                        SendUserToMainActivity();
-                                        Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
-                                        loadingBar.dismiss();
+  String passwordOfUser = UserPassword.getText().toString();
+
+
+
+           RootRef.child("Users").child(currentUserID).child("device_token")
+                   .setValue(deviceToken);
+
+
+
+
+           RootRef.child("Users").child(currentUserID).child("Email_token")
+                   .setValue(emailtoken);
+
+
+
+
+
+
+
+
+     RootRef.child("Users").child(currentUserID).child("userPassword")
+             .setValue(passwordOfUser);
+
+     SendUserToMainActivity();
+     Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+     loadingBar.dismiss();
                                     }
                                     else
                                     {

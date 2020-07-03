@@ -20,7 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-//import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 
 public class LoginActivity extends AppCompatActivity
 {
@@ -124,30 +125,35 @@ public class LoginActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task)
                         {
-                            if (task.isSuccessful())
-                            {
-                                String currentUserId = mAuth.getCurrentUser().getUid();
-                               // String deviceToken = FirebaseInstanceId.getInstance().getToken();
+      if (task.isSuccessful())
+      {
+          String currentUserId = mAuth.getCurrentUser().getUid();
+   String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                                String emailtoken = UserEmail.getText().toString();
-
-
-
-                                UsersRef.child(currentUserId).child("device_token")
-                                        .setValue(emailtoken)
+          UsersRef.child(currentUserId).child("device_token")
+                  .setValue(deviceToken);
 
 
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task)
-                                            {
-                                                if (task.isSuccessful())
-                                                {
-                                                    SendUserToMainActivity();
-                                                    Toast.makeText(LoginActivity.this, "Logged in Successful...", Toast.LENGTH_SHORT).show();
-                                                    loadingBar.dismiss();
-                                                }
-                                            }
+
+    String emailtoken = UserEmail.getText().toString();
+
+
+
+    UsersRef.child(currentUserId).child("Email_token")
+            .setValue(emailtoken)
+
+
+     .addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task)
+         {
+             if (task.isSuccessful())
+             {
+                 SendUserToMainActivity();
+                 Toast.makeText(LoginActivity.this, "Logged in Successful...", Toast.LENGTH_SHORT).show();
+                 loadingBar.dismiss();
+             }
+         }
                                         });
                             }
                             else
