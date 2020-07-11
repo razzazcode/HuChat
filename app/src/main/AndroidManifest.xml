@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".imageViewerActivity"></activity>
+        <activity android:name=".GroupesSettingsActivity"></activity>
+        <activity android:name=".GroupeChat2" />
+        <activity android:name=".imageViewerActivity" />
         <activity
             android:name=".ChatActivity"
             android:parentActivityName=".MainActivity" />

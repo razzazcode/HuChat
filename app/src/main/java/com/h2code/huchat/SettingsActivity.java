@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef = FirebaseDatabase.getInstance().getReference().child("Groupes2");
         UserProfileImagesRef = FirebaseStorage
                 .getInstance().getReference()
                 .child("Profile Images");

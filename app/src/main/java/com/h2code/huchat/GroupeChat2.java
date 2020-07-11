@@ -32,24 +32,24 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity
+public class GroupeChat2 extends AppCompatActivity
 {
     private Toolbar mToolbar;
     private ViewPager myViewPager;
     private TabLayout myTabLayout;
     private TabsAccessorAdapter myTabsAccessorAdapter;
-    private String currentUserID;
+
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
-    private DatabaseReference RootRef;
-
+    private DatabaseReference RootRef , groupeRootREF2 , UserGroupesRef;
+    private String currentUserID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_groupe_chat2);
 
 /*
 FirebaseApp.initializeApp(MainActivity.this);
@@ -77,20 +77,27 @@ FirebaseApp.initializeApp(MainActivity.this);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         currentUserID = mAuth.getCurrentUser().getUid();
-        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef = FirebaseDatabase.getInstance().getReference().child("Groupes2");
 
 
-        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        groupeRootREF2= FirebaseDatabase.getInstance().getReference().child("Groupes2").child(currentUserID);
+
+
+        UserGroupesRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(currentUserID).child("OwnGrpName");
+
+
+        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbarG);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Hu Chat");
+        getSupportActionBar().setTitle("Hu Chat Groupes");
 
 
-        myViewPager = (ViewPager) findViewById(R.id.main_tabs_pager);
+        myViewPager = (ViewPager) findViewById(R.id.main_tabs_pagerG);
         myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
         myViewPager.setAdapter(myTabsAccessorAdapter);
 
 
-        myTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+        myTabLayout = (TabLayout) findViewById(R.id.main_tabsG);
         myTabLayout.setupWithViewPager(myViewPager);
     }
 
@@ -100,16 +107,8 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onStart();
 
-        if (currentUser == null)
-        {
-            SendUserToLoginActivity();
-        }
-        else
-        {
-            updateUserStatus("online");
+        updateUserStatus("online");
 
-            VerifyUserExistance();
-        }
     }
 
 
@@ -118,10 +117,7 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onStop();
 
-        if (currentUser != null)
-        {
-            updateUserStatus("offline");
-        }
+
     }
 
 
@@ -131,38 +127,12 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onDestroy();
 
-        if (currentUser != null)
-        {
-            updateUserStatus("offline");
-        }
+
     }
 
 
 
-    private void VerifyUserExistance()
-    {
-        String currentUserID = mAuth.getCurrentUser().getUid();
 
-        RootRef.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if ((dataSnapshot.child("name").exists()))
-                {
-                    Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    SendUserToSettingsActivity();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 
 
@@ -171,7 +141,7 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onCreateOptionsMenu(menu);
 
-        getMenuInflater().inflate(R.menu.options_menu, menu);
+        getMenuInflater().inflate(R.menu.groupes_menu, menu);
 
         return true;
     }
@@ -182,24 +152,24 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onOptionsItemSelected(item);
 
-        if (item.getItemId() == R.id.main_logout_option)
+        if (item.getItemId() == R.id.Groupes_logout_option)
         {
-           // OneSignal.setSubscription(false);
+            // OneSignal.setSubscription(false);
 
 
             updateUserStatus("offline");
             mAuth.signOut();
             SendUserToLoginActivity();
         }
-        if (item.getItemId() == R.id.main_settings_option)
+        if (item.getItemId() == R.id.Groupes_settings_option)
         {
             SendUserToSettingsActivity();
         }
-        if (item.getItemId() == R.id.main_create_group_option)
+        if (item.getItemId() == R.id.Groupes_create_group_option)
         {
             RequestNewGroup();
         }
-        if (item.getItemId() == R.id.main_find_friends_option)
+        if (item.getItemId() == R.id.Groupes_find_Groupes_option)
         {
             SendUserToFindFriendsActivity();
         }
@@ -210,10 +180,10 @@ FirebaseApp.initializeApp(MainActivity.this);
 
     private void RequestNewGroup()
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(GroupeChat2.this, R.style.AlertDialog);
         builder.setTitle("Enter Group Name :");
 
-        final EditText groupNameField = new EditText(MainActivity.this);
+        final EditText groupNameField = new EditText(GroupeChat2.this);
         groupNameField.setHint("e.g  Hu Chat");
         builder.setView(groupNameField);
 
@@ -225,11 +195,11 @@ FirebaseApp.initializeApp(MainActivity.this);
 
                 if (TextUtils.isEmpty(groupName))
                 {
-                    Toast.makeText(MainActivity.this, "Please write Group Name...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GroupeChat2.this, "Please write Group Name...", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    CreateNewGroup(groupName);
+                    CreateNewGroup2(groupName);
                 }
             }
         });
@@ -247,26 +217,29 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
 
-    private void CreateNewGroup(final String groupName)
+    private void CreateNewGroup2(final String groupName)
     {
-        RootRef.child("Groups").child(groupName).setValue("")
+        groupeRootREF2.child(groupName).setValue("")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
                         if (task.isSuccessful())
                         {
-                            Toast.makeText(MainActivity.this, groupName + " group is Created Successfully...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GroupeChat2.this, groupName + " group is Created Successfully...", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
+
+        UserGroupesRef.child(groupName).setValue(groupName);
     }
 
 
 
     private void SendUserToLoginActivity()
     {
-        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent loginIntent = new Intent(GroupeChat2.this, LoginActivity.class);
         loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(loginIntent);
 
@@ -274,14 +247,14 @@ FirebaseApp.initializeApp(MainActivity.this);
 
     private void SendUserToSettingsActivity()
     {
-        Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        Intent settingsIntent = new Intent(GroupeChat2.this, GroupesSettingsActivity.class);
         startActivity(settingsIntent);
     }
 
 
     private void SendUserToFindFriendsActivity()
     {
-        Intent findFriendsIntent = new Intent(MainActivity.this, FindFriendsActivity.class);
+        Intent findFriendsIntent = new Intent(GroupeChat2.this, FindFriendsActivity.class);
         startActivity(findFriendsIntent);
     }
 

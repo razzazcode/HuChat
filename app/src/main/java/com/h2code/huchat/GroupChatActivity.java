@@ -34,7 +34,7 @@ public class GroupChatActivity extends AppCompatActivity
     private TextView displayTextMessages;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference UsersRef, GroupNameRef, GroupMessageKeyRef;
+    private DatabaseReference UsersRef, GroupNameRef, GroupMessageKeyRef , groupeRootREF2;
 
     private String currentGroupName, currentUserID, currentUserName, currentDate, currentTime;
 
@@ -57,6 +57,8 @@ public class GroupChatActivity extends AppCompatActivity
         GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Groups").child(currentGroupName);
 
 
+
+        groupeRootREF2= FirebaseDatabase.getInstance().getReference().child("Groupes2").child(currentUserID).child(currentGroupName);
 
         InitializeFields();
 
@@ -84,7 +86,7 @@ public class GroupChatActivity extends AppCompatActivity
     {
         super.onStart();
 
-        GroupNameRef.addChildEventListener(new ChildEventListener() {
+        groupeRootREF2.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
@@ -160,7 +162,7 @@ public class GroupChatActivity extends AppCompatActivity
     private void SaveMessageInfoToDatabase()
     {
         String message = userMessageInput.getText().toString();
-        String messagekEY = GroupNameRef.push().getKey();
+        String messagekEY = groupeRootREF2.push().getKey();
 
         if (TextUtils.isEmpty(message))
         {
@@ -178,9 +180,9 @@ public class GroupChatActivity extends AppCompatActivity
 
 
             HashMap<String, Object> groupMessageKey = new HashMap<>();
-            GroupNameRef.updateChildren(groupMessageKey);
+            groupeRootREF2.updateChildren(groupMessageKey);
 
-            GroupMessageKeyRef = GroupNameRef.child(messagekEY);
+            GroupMessageKeyRef = groupeRootREF2.child(messagekEY);
 
             HashMap<String, Object> messageInfoMap = new HashMap<>();
             messageInfoMap.put("name", currentUserName);

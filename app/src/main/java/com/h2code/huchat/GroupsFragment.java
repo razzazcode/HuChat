@@ -1,17 +1,28 @@
 package com.h2code.huchat;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,9 +45,13 @@ public class GroupsFragment extends Fragment
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> list_of_groups = new ArrayList<>();
 
-    private DatabaseReference GroupRef;
+    private Button grpchatact , createNewGroupe;
 
+    private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef;
 
+    private String currentUserID;
+    private FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
 
     public GroupsFragment() {
         // Required empty public constructor
@@ -50,13 +65,54 @@ public class GroupsFragment extends Fragment
         groupFragmentView = inflater.inflate(R.layout.fragment_groups, container, false);
 
 
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+
+
+
         GroupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
+
+        groupeRootREF2= FirebaseDatabase.getInstance().getReference().child("Groupes2").child(currentUserID);
+
+
+        UserGroupesRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(currentUserID).child("OwnGrpName");
+
 
 
         IntializeFields();
 
 
         RetrieveAndDisplayGroups();
+
+
+        grpchatact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent mainIntent = new Intent(getContext(), GroupeChat2.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(mainIntent);
+
+
+            }
+        });
+
+
+
+        createNewGroupe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                RequestNewGroup();
+
+
+            }
+        });
+
+
+
 
 
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -82,6 +138,13 @@ public class GroupsFragment extends Fragment
         list_view = (ListView) groupFragmentView.findViewById(R.id.list_view);
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_of_groups);
         list_view.setAdapter(arrayAdapter);
+
+        grpchatact = groupFragmentView.findViewById(R.id.sendtoGroupes);
+
+        createNewGroupe= groupFragmentView.findViewById(R.id.createnewgroupe);
+
+
+
     }
 
 
@@ -89,7 +152,7 @@ public class GroupsFragment extends Fragment
 
     private void RetrieveAndDisplayGroups()
     {
-        GroupRef.addValueEventListener(new ValueEventListener() {
+        groupeRootREF2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -111,5 +174,87 @@ public class GroupsFragment extends Fragment
 
             }
         });
+
+
+
+
+
+
+
     }
+
+
+
+
+
+
+
+    private void RequestNewGroup()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialog);
+        builder.setTitle("Enter Group 2 Name :");
+
+        final EditText groupNameField = new EditText(getContext());
+        groupNameField.setHint("e.g  Hu Chat");
+        builder.setView(groupNameField);
+
+        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                String groupName = groupNameField.getText().toString();
+
+                if (TextUtils.isEmpty(groupName))
+                {
+                    Toast.makeText(getContext(), "Please write Group Name...", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    CreateNewGroup(groupName);
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i)
+            {
+                dialogInterface.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
+
+
+
+
+
+    private void CreateNewGroup(final String groupName)
+    {
+
+
+
+        groupeRootREF2.child(groupName).setValue("")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            Toast.makeText(getContext(), groupName + " group is Created Successfully...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+        UserGroupesRef.child(groupName).setValue(groupName);
+
+
+    }
+
+
+
 }
