@@ -9,18 +9,13 @@
 
 
 
-   <Button
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:id="@+id/sendtoGroupes"
-       android:text="Send to groupes chat" />
+
 
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/createnewgroupe"
-        android:layout_below="@+id/sendtoGroupes"
         android:text="Create new Groupe" />
 
 

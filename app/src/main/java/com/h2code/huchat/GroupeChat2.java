@@ -37,12 +37,12 @@ public class GroupeChat2 extends AppCompatActivity
     private Toolbar mToolbar;
     private ViewPager myViewPager;
     private TabLayout myTabLayout;
-    private TabsAccessorAdapter myTabsAccessorAdapter;
+    private GroupesTabAccessorAdapter myTabsAccessorAdapter;
 
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
     private DatabaseReference RootRef , groupeRootREF2 , UserGroupesRef;
-    private String currentUserID;
+    private String currentUserID , CurrentgroupeName;
 
 
     @Override
@@ -69,6 +69,7 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
 
+        CurrentgroupeName = getIntent().getExtras().get("groupName").toString();
 
 
 
@@ -93,7 +94,7 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
         myViewPager = (ViewPager) findViewById(R.id.main_tabs_pagerG);
-        myTabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager());
+        myTabsAccessorAdapter = new GroupesTabAccessorAdapter(getSupportFragmentManager());
         myViewPager.setAdapter(myTabsAccessorAdapter);
 
 

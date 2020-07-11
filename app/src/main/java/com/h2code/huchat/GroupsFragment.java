@@ -45,9 +45,9 @@ public class GroupsFragment extends Fragment
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> list_of_groups = new ArrayList<>();
 
-    private Button grpchatact , createNewGroupe;
+    private Button  createNewGroupe;
 
-    private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef;
+    private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef , groupeCreatorId;
 
     private String currentUserID;
     private FirebaseUser currentUser;
@@ -72,7 +72,7 @@ public class GroupsFragment extends Fragment
 
         GroupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
 
-        groupeRootREF2= FirebaseDatabase.getInstance().getReference().child("Groupes2").child(currentUserID);
+        groupeRootREF2= FirebaseDatabase.getInstance().getReference().child("GroupesMainActivity").child("Groupes").child(currentUserID);
 
 
         UserGroupesRef = FirebaseDatabase.getInstance().getReference()
@@ -86,17 +86,7 @@ public class GroupsFragment extends Fragment
         RetrieveAndDisplayGroups();
 
 
-        grpchatact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent mainIntent = new Intent(getContext(), GroupeChat2.class);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(mainIntent);
-
-
-            }
-        });
 
 
 
@@ -121,8 +111,10 @@ public class GroupsFragment extends Fragment
             {
                 String currentGroupName = adapterView.getItemAtPosition(position).toString();
 
-                Intent groupChatIntent = new Intent(getContext(), GroupChatActivity.class);
+                Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
                 groupChatIntent.putExtra("groupName" , currentGroupName);
+              //  groupChatIntent.putExtra("groupCreatorName" , groupeCreatorId);
+
                 startActivity(groupChatIntent);
             }
         });
@@ -139,7 +131,6 @@ public class GroupsFragment extends Fragment
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_of_groups);
         list_view.setAdapter(arrayAdapter);
 
-        grpchatact = groupFragmentView.findViewById(R.id.sendtoGroupes);
 
         createNewGroupe= groupFragmentView.findViewById(R.id.createnewgroupe);
 
@@ -236,8 +227,12 @@ public class GroupsFragment extends Fragment
     {
 
 
+        // groupeRootREF2.child(groupName).setvalue("").addOncomplete...
 
-        groupeRootREF2.child(groupName).setValue("")
+        groupeRootREF2.child(groupName).child("GroupeCreator")
+                .setValue(currentUserID)
+
+
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
