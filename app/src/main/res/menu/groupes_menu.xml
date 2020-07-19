@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+    <!-- 8 - 1 - a
+
+    Creating menu deisgn xml
+
+then to java main activity file to get it on mainActivity
+ ta7t 5ales 3ashan nekteb on create Options menue
+
+    -->
+
+    <item
+
+
+        android:title="Find Groupes"
+
+        android:id="@+id/Groupes_find_Groupes_option"
+        app:showAsAction="never"
+
+        >
+
+
+
+
+    </item>
+
+
+
+    <item
+
+
+        android:title="Groupes Settings"
+
+        android:id="@+id/Groupes_settings_option"
+        app:showAsAction="never"
+
+        >
+
+
+
+
+    </item>
+    <item
+
+
+        android:title="Log out"
+
+        android:id="@+id/Groupes_logout_option"
+        app:showAsAction="never"
+
+        >
+
+
+
+
+    </item>
+
+
+    <item
+
+
+        android:title="create new grupe"
+
+        android:id="@+id/Groupes_create_group_option"
+        app:showAsAction="never"
+
+        >
+
+
+
+
+    </item>
+
+
+</menu>

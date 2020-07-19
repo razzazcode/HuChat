@@ -28,7 +28,9 @@ import android.os.Bundle;
 
 public class GroupesProfileActivity extends AppCompatActivity
 {
-    private String receiverUserID, senderUserID, Current_State , GroupeName ,GroupeCreatorId ;
+    private String receiverUserID, senderUserID, Current_State
+         , GroupeCreatorImagePath
+            , RecieverImagePath , ReacieverUserName, GroupeName ,GroupeCreatorId , GroupeCreatorUserName;
 
     private CircleImageView userProfileImage;
     private TextView userProfileName, userProfileStatus;
@@ -83,11 +85,48 @@ public class GroupesProfileActivity extends AppCompatActivity
         DeclineMessageRequestButton = (Button) findViewById(R.id.decline_message_request_buttonG);
         Current_State = "new";
 
-
+InfoOfCreator();
         RetrieveUserInfo();
     }
 
+    private void InfoOfCreator() {
 
+
+
+        UserRef.child(senderUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if ((dataSnapshot.exists())  &&  (dataSnapshot.hasChild("image")))
+                {
+                    GroupeCreatorImagePath = dataSnapshot.child("image").getValue().toString();
+                    GroupeCreatorUserName = dataSnapshot.child("name").getValue().toString();
+                    String userstatus = dataSnapshot.child("status").getValue().toString();
+
+                }
+                else
+                {
+                    GroupeCreatorUserName = dataSnapshot.child("name").getValue().toString();
+                    String userstatus = dataSnapshot.child("status").getValue().toString();
+
+
+
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+    }
 
     private void RetrieveUserInfo()
     {
@@ -97,12 +136,14 @@ public class GroupesProfileActivity extends AppCompatActivity
             {
                 if ((dataSnapshot.exists())  &&  (dataSnapshot.hasChild("image")))
                 {
-                    String userImage = dataSnapshot.child("image").getValue().toString();
-                    String userName = dataSnapshot.child("name").getValue().toString();
+                    RecieverImagePath = dataSnapshot.child("image").getValue().toString();
+                     ReacieverUserName = dataSnapshot.child("name").getValue().toString();
                     String userstatus = dataSnapshot.child("status").getValue().toString();
 
-                    Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(userProfileImage);
-                    userProfileName.setText(userName);
+
+
+                    Picasso.get().load(RecieverImagePath).placeholder(R.drawable.profile_image).into(userProfileImage);
+                    userProfileName.setText(GroupeCreatorUserName);
                     userProfileStatus.setText(userstatus);
 
 
@@ -110,10 +151,10 @@ public class GroupesProfileActivity extends AppCompatActivity
                 }
                 else
                 {
-                    String userName = dataSnapshot.child("name").getValue().toString();
+                    ReacieverUserName = dataSnapshot.child("name").getValue().toString();
                     String userstatus = dataSnapshot.child("status").getValue().toString();
 
-                    userProfileName.setText(userName);
+                    userProfileName.setText(ReacieverUserName);
                     userProfileStatus.setText(userstatus);
 
 
@@ -366,13 +407,18 @@ public class GroupesProfileActivity extends AppCompatActivity
      {
 
 
+
+         GroupesRequestsFragmentRef.child(receiverUserID)
+                 .child(GroupeName).child("GroupeCreatorImagePath").setValue(GroupeCreatorImagePath);
+
          GroupesRequestsFragmentRef.child(receiverUserID)
                  .child(GroupeName).child("GroupeCreator").setValue(senderUserID);
 
          GroupesRequestsFragmentRef.child(receiverUserID)
                  .child(GroupeName).child("GroupeName").setValue(GroupeName);
 
-
+         GroupesRequestsFragmentRef.child(receiverUserID)
+                 .child(GroupeName).child("GroupeCreatorUserName").setValue(GroupeCreatorUserName);
 
          GroupesRequestsFragmentRef.child(receiverUserID)
                  .child(GroupeName)

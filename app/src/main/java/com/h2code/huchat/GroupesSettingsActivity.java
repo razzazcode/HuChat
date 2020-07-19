@@ -34,17 +34,17 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SettingsActivity extends AppCompatActivity
+public class GroupesSettingsActivity extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
     private EditText userName, userStatus;
     private CircleImageView userProfileImage;
 
-    private String currentUserID , profilepicLink;
+    private String currentUserID , profilepicLink , gropeName;
     private FirebaseAuth mAuth;
     private DatabaseReference RootRef;
 
-    private static final int GalleryPick = 1;
+    private static final int GalleryPick = 2;
     private StorageReference UserProfileImagesRef;
     private ProgressDialog loadingBar;
 
@@ -55,16 +55,17 @@ public class SettingsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_groupes_settings);
 
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef = FirebaseDatabase.getInstance().getReference().child("Groupes2");
         UserProfileImagesRef = FirebaseStorage
-                .getInstance().getReference()
+                .getInstance().getReference() .child("Groupes2")
                 .child("Profile Images");
 
+        gropeName="";
 
         InitializeFields();
 
@@ -100,17 +101,17 @@ public class SettingsActivity extends AppCompatActivity
 
     private void InitializeFields()
     {
-        UpdateAccountSettings = (Button) findViewById(R.id.update_settings_button);
-        userName = (EditText) findViewById(R.id.set_user_name);
-        userStatus = (EditText) findViewById(R.id.set_profile_status);
-        userProfileImage = (CircleImageView) findViewById(R.id.set_profile_image);
+        UpdateAccountSettings = (Button) findViewById(R.id.Groupesupdate_settings_button);
+        userName = (EditText) findViewById(R.id.Groupesset_user_name);
+        userStatus = (EditText) findViewById(R.id.Groupesset_profile_status);
+        userProfileImage = (CircleImageView) findViewById(R.id.Groupesset_profile_image);
         loadingBar = new ProgressDialog(this);
 
-        SettingsToolBar = (Toolbar) findViewById(R.id.settings_toolbar);
+        SettingsToolBar = (Toolbar) findViewById(R.id.Groupessettings_toolbar);
         setSupportActionBar(SettingsToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setTitle("Account Settings");
+        getSupportActionBar().setTitle("Groupes Settings");
     }
 
 
@@ -136,64 +137,64 @@ public class SettingsActivity extends AppCompatActivity
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK)
- {
-loadingBar.setTitle("Set Profile Image");
-loadingBar.setMessage("Please wait, your profile image is updating...");
-loadingBar.setCanceledOnTouchOutside(false);
-loadingBar.show();
+            {
+                loadingBar.setTitle("Set Profile Image");
+                loadingBar.setMessage("Please wait, your profile image is updating...");
+                loadingBar.setCanceledOnTouchOutside(false);
+                loadingBar.show();
 
-Uri resultUri = result.getUri();
+                Uri resultUri = result.getUri();
 
 
 
-  final  StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
+                final  StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
 
-filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-    @Override
-    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
-    {
-        if (task.isSuccessful())
-        {
-            Toast.makeText(SettingsActivity.this, "Profile Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
+                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+                    {
+                        if (task.isSuccessful())
+       {
+           Toast.makeText(GroupesSettingsActivity.this, "Profile Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
 
- // final String downloaedUrl = task.getResult().getDownloadUrl().toString();
+           // final String downloaedUrl = task.getResult().getDownloadUrl().toString();
 
- 
- 
- 
-     Task<Uri> urlTask = task.getResult().getStorage().getDownloadUrl();
-        while (!urlTask.isSuccessful());
-        Uri downloadUrl = urlTask.getResult();
-                  profilepicLink = downloadUrl.toString();
 
-                  
-  //    final String downloadLinkofuploadedfile = filePath.getDownloadUrl().toString();
-   //  task.getResult().getMetadata().getReference().getDownloadUrl().toString();
- 
-  RootRef.child("Users").child(currentUserID).child("image")
-          .setValue(profilepicLink)
-                     .addOnCompleteListener(new OnCompleteListener<Void>() {
-                              @Override
+
+
+           Task<Uri> urlTask = task.getResult().getStorage().getDownloadUrl();
+           while (!urlTask.isSuccessful());
+           Uri downloadUrl = urlTask.getResult();
+           profilepicLink = downloadUrl.toString();
+
+
+           //    final String downloadLinkofuploadedfile = filePath.getDownloadUrl().toString();
+           //  task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+
+           RootRef.child("UsersGroupes").child(currentUserID).child(gropeName).child("image")
+                                    .setValue(profilepicLink)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
                                         public void onComplete(@NonNull Task<Void> task)
                                         {
-    if (task.isSuccessful())
-    {
-        Toast.makeText(SettingsActivity.this, "Image save in Database, Successfully...", Toast.LENGTH_SHORT).show();
-        loadingBar.dismiss();
-    }
-    else
-    {
-        String message = task.getException().toString();
-        Toast.makeText(SettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-        loadingBar.dismiss();
-    }
+                                            if (task.isSuccessful())
+                                            {
+                                                Toast.makeText(GroupesSettingsActivity.this, "Image save in Database, Successfully...", Toast.LENGTH_SHORT).show();
+                                                loadingBar.dismiss();
+                                            }
+                                            else
+                                            {
+                                                String message = task.getException().toString();
+                                                Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                                                loadingBar.dismiss();
+                                            }
                                         }
                                     });
                         }
                         else
                         {
                             String message = task.getException().toString();
-                            Toast.makeText(SettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                             loadingBar.dismiss();
                         }
                     }
@@ -221,17 +222,17 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
         else
         {
             HashMap<String, Object> profileMap = new HashMap<>();
-            profileMap.put("uid", currentUserID);
+            profileMap.put("uid", currentUserID + gropeName);
             profileMap.put("name", setUserName);
             profileMap.put("status", setStatus);
-            RootRef.child("Users").child(currentUserID).updateChildren(profileMap)
+            RootRef.child("UsersGroupes").child(currentUserID).child(gropeName).updateChildren(profileMap)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task)
                         {
                             if (task.isSuccessful())
                             {
-                                Toast.makeText(SettingsActivity.this, "Profile Updated Successfully...", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GroupesSettingsActivity.this, "Profile Updated Successfully...", Toast.LENGTH_SHORT).show();
 
 
                                 SendUserToMainActivity();
@@ -239,7 +240,7 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
                             else
                             {
                                 String message = task.getException().toString();
-                                Toast.makeText(SettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -250,35 +251,35 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
 
     private void RetrieveUserInfo()
     {
-        RootRef.child("Users").child(currentUserID)
+        RootRef.child("UsersGroupes").child(currentUserID).child(gropeName)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
-  public void onDataChange(DataSnapshot dataSnapshot)
-  {
-      if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name") && (dataSnapshot.hasChild("image"))))
-      {
-          String retrieveUserName = dataSnapshot.child("name").getValue().toString();
-          String retrievesStatus = dataSnapshot.child("status").getValue().toString();
-          String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
+                    public void onDataChange(DataSnapshot dataSnapshot)
+                    {
+                        if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name") && (dataSnapshot.hasChild("image"))))
+                        {
+                            String retrieveUserName = dataSnapshot.child("name").getValue().toString();
+                            String retrievesStatus = dataSnapshot.child("status").getValue().toString();
+                            String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
 
-          userName.setText(retrieveUserName);
-          userStatus.setText(retrievesStatus);
-          Picasso.get().load(retrieveProfileImage).into(userProfileImage);
-
-
-
-
-     //  Picasso.with(Settingsactivity.this).load(retrieveProfileImage).into(userProfileImage);
+                            userName.setText(retrieveUserName);
+                            userStatus.setText(retrievesStatus);
+                            Picasso.get().load(retrieveProfileImage).into(userProfileImage);
 
 
 
 
+                            //  Picasso.with(Settingsactivity.this).load(retrieveProfileImage).into(userProfileImage);
 
 
-      }
-      else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")))
-      {
-          String retrieveUserName = dataSnapshot.child("name").getValue().toString();
+
+
+
+
+                        }
+                        else if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name")))
+                        {
+                            String retrieveUserName = dataSnapshot.child("name").getValue().toString();
                             String retrievesStatus = dataSnapshot.child("status").getValue().toString();
 
                             userName.setText(retrieveUserName);
@@ -287,7 +288,7 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
                         else
                         {
                             userName.setVisibility(View.VISIBLE);
-                            Toast.makeText(SettingsActivity.this, "Please set & update your profile information...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GroupesSettingsActivity.this, "Please set & update your profile information...", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -302,7 +303,7 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
 
     private void SendUserToMainActivity()
     {
-        Intent mainIntent = new Intent(SettingsActivity.this, MainActivity.class);
+        Intent mainIntent = new Intent(GroupesSettingsActivity.this, GroupeChat2.class);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(mainIntent);
         finish();

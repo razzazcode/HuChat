@@ -47,9 +47,9 @@ public class GroupsFragment extends Fragment
 
     private Button  createNewGroupe;
 
-    private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef , groupeCreatorId;
+    private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef , UserssRef;
 
-    private String currentUserID;
+    private String currentUserID , GroupeCreatorUserName;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
 
@@ -78,6 +78,14 @@ public class GroupsFragment extends Fragment
 
         UserGroupesRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(currentUserID).child("OwnGrpName");
+
+        UserssRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users");
+
+
+
+        GettingCreatorUserName();
+
 
 
 
@@ -114,7 +122,13 @@ public class GroupsFragment extends Fragment
 
                 Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
                 groupChatIntent.putExtra("groupName" , currentGroupName);
-              //  groupChatIntent.putExtra("groupCreatorName" , groupeCreatorId);
+
+
+
+
+
+
+                //  groupChatIntent.putExtra("groupCreatorName" , groupeCreatorId);
 
                 startActivity(groupChatIntent);
             }
@@ -124,6 +138,34 @@ public class GroupsFragment extends Fragment
         return groupFragmentView;
     }
 
+    private void GettingCreatorUserName() {
+
+
+        UserssRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild("name")) {
+
+    GroupeCreatorUserName = dataSnapshot.child("name")
+           .getValue().toString();
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+    }
 
 
     private void IntializeFields()
@@ -144,7 +186,7 @@ public class GroupsFragment extends Fragment
 
     private void RetrieveAndDisplayGroups()
     {
-        groupeRootREF2.addValueEventListener(new ValueEventListener() {
+        UserGroupesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -228,10 +270,17 @@ public class GroupsFragment extends Fragment
     {
 
 
+
+        GettingCreatorUserName();
+
          groupeRootREF2.child(currentUserID).child(groupName).child("GroupeName").setValue(groupName);
 
         groupeRootREF2.child(currentUserID).child(groupName).child("GroupeCreator")
-                .setValue(currentUserID)
+                .setValue(currentUserID);
+
+        groupeRootREF2.child(currentUserID).child(groupName).child("GroupeCreatorUserName")
+                .setValue(GroupeCreatorUserName)
+
 
 
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
