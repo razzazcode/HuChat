@@ -32,9 +32,9 @@ public class GroupesProfileActivity extends AppCompatActivity
 
     private CircleImageView userProfileImage;
     private TextView userProfileName, userProfileStatus;
-    private Button SendMessageRequestButton, DeclineMessageRequestButton;
+    private Button SendGroupeRequestButton, DeclineMessageRequestButton;
 
-    private DatabaseReference UserRef, ChatRequestsRef, ContactsRef, NotificationRef , GroupesRequestsFragmentRef;
+    private DatabaseReference UserRef, NewUserGroupesRef, ChatRequestsRef,GroupesContactsOfAgroupetRef, ContactsRef, GroupesNotificationRef, GroupesRequestsFragmentRef;
     private FirebaseAuth mAuth;
 
 
@@ -49,25 +49,37 @@ public class GroupesProfileActivity extends AppCompatActivity
         UserRef = FirebaseDatabase.getInstance().getReference().child("Users");
         ChatRequestsRef = FirebaseDatabase.getInstance().getReference().child("Chat Requests");
         ContactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
-        NotificationRef = FirebaseDatabase.getInstance().getReference().child("Notifications");
-
-
-        GroupesRequestsFragmentRef = FirebaseDatabase.getInstance().getReference().child("GroupesMainActivity").child("Groupe Requests");
-
-
-
+        GroupesNotificationRef = FirebaseDatabase.getInstance().getReference()
+                .child("GroupesMainActivity").child("Groupes Notifications");
 
         GroupeCreatorId = getIntent().getExtras().get("GroupeCreatorId").toString();
-        GroupeName = getIntent().getExtras().get("GroupeName").toString();
 
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         senderUserID = mAuth.getCurrentUser().getUid();
+        GroupeName = getIntent().getExtras().get("GroupeName").toString();
+
+
+        GroupesRequestsFragmentRef = FirebaseDatabase.getInstance().getReference()
+                .child("GroupesMainActivity")
+               .child("GroupesRequests") ;
+
+        GroupesContactsOfAgroupetRef = FirebaseDatabase.getInstance().getReference()
+                .child("GroupesMainActivity").child("Groupes")
+                .child(senderUserID)
+                .child(GroupeName).child("ContactsOfTheGroupe");
+
+
+        NewUserGroupesRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(receiverUserID).child("OwnGrpName");
+
+
+
 
 
         userProfileImage = (CircleImageView) findViewById(R.id.visit_profile_imageG);
         userProfileName = (TextView) findViewById(R.id.visit_user_nameG);
         userProfileStatus = (TextView) findViewById(R.id.visit_profile_statusG);
-        SendMessageRequestButton = (Button) findViewById(R.id.send_message_request_buttonG);
+        SendGroupeRequestButton = (Button) findViewById(R.id.send_message_request_buttonG);
         DeclineMessageRequestButton = (Button) findViewById(R.id.decline_message_request_buttonG);
         Current_State = "new";
 
@@ -122,55 +134,55 @@ public class GroupesProfileActivity extends AppCompatActivity
 
     private void ManageChatRequests()
     {
-        GroupesRequestsFragmentRef.child(senderUserID)
+        GroupesRequestsFragmentRef.child(GroupeName).child(senderUserID)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-                        if (dataSnapshot.hasChild(receiverUserID))
-                        {
-                            String request_type = dataSnapshot.child(receiverUserID).child("request_type").getValue().toString();
+   public void onDataChange(DataSnapshot dataSnapshot)
+   {
+       if (dataSnapshot.hasChild(receiverUserID))
+       {
+           String request_type = dataSnapshot.child(receiverUserID).child("request_type").getValue().toString();
 
-                            if (request_type.equals("sent"))
-                            {
-                                Current_State = "request_sent";
-                                SendMessageRequestButton.setText("Cancel Chat Request");
-                            }
-                            else if (request_type.equals("received"))
-                            {
-                                Current_State = "request_received";
-                                SendMessageRequestButton.setText("Accept Chat Request");
+    if (request_type.equals("sent"))
+    {
+        Current_State = "request_sent";
+        SendGroupeRequestButton.setText("Cancel Chat Request");
+    }
+    else if (request_type.equals("received"))
+    {
+        Current_State = "request_received";
+                         SendGroupeRequestButton.setText("Accept Chat Request");
 
-                                DeclineMessageRequestButton.setVisibility(View.VISIBLE);
-                                DeclineMessageRequestButton.setEnabled(true);
+      DeclineMessageRequestButton.setVisibility(View.VISIBLE);
+      DeclineMessageRequestButton.setEnabled(true);
 
-                                DeclineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view)
-                                    {
-                                        CancelChatRequest();
-                                    }
-                                });
+      DeclineMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View view)
+          {
+              CancelGrouopeRequest();
+          }
+      });
                             }
                         }
                         else
                         {
-                            ContactsRef.child(senderUserID)
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot)
-                                        {
-                                            if (dataSnapshot.hasChild(receiverUserID))
-                                            {
-                                                Current_State = "friends";
-                                                SendMessageRequestButton.setText("Remove this Contact");
-                                            }
-                                        }
+       GroupesContactsOfAgroupetRef
+               .addListenerForSingleValueEvent(new ValueEventListener() {
+              @Override
+              public void onDataChange(DataSnapshot dataSnapshot)
+              {
+      if (dataSnapshot.hasChild(receiverUserID))
+      {
+          Current_State = "friends";
+          SendGroupeRequestButton.setText("Remove this Contact");
+      }
+            }
 
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                                        }
+            }
                                     });
                         }
                     }
@@ -185,19 +197,24 @@ public class GroupesProfileActivity extends AppCompatActivity
 
         if (!senderUserID.equals(receiverUserID))
         {
-            SendMessageRequestButton.setOnClickListener(new View.OnClickListener() {
+
+            SendGroupeRequestButton.setText(" Send Groupe Invitation");
+
+            SendGroupeRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view)
                 {
-                    SendMessageRequestButton.setEnabled(false);
+                    SendGroupeRequestButton.setEnabled(false);
 
                     if (Current_State.equals("new"))
                     {
-                        SendChatRequest();
+                        SendGroupeChatRequest();
+
+
                     }
                     if (Current_State.equals("request_sent"))
                     {
-                        CancelChatRequest();
+                        CancelGrouopeRequest();
                     }
                     if (Current_State.equals("request_received"))
                     {
@@ -212,7 +229,7 @@ public class GroupesProfileActivity extends AppCompatActivity
         }
         else
         {
-            SendMessageRequestButton.setVisibility(View.INVISIBLE);
+            SendGroupeRequestButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -220,32 +237,23 @@ public class GroupesProfileActivity extends AppCompatActivity
 
     private void RemoveSpecificContact()
     {
-        ContactsRef.child(senderUserID).child(receiverUserID)
+        GroupesContactsOfAgroupetRef.child(receiverUserID)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
-                        if (task.isSuccessful())
-                        {
-                            ContactsRef.child(receiverUserID).child(senderUserID)
-                                    .removeValue()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            if (task.isSuccessful())
-                                            {
-                                                SendMessageRequestButton.setEnabled(true);
-                                                Current_State = "new";
-                                                SendMessageRequestButton.setText("Send Message");
 
-                                                DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
-                                                DeclineMessageRequestButton.setEnabled(false);
-                                            }
-                                        }
-                                    });
-                        }
+       if (task.isSuccessful())
+       {
+           SendGroupeRequestButton.setEnabled(true);
+           Current_State = "new";
+           SendGroupeRequestButton.setText("Send Message");
+
+           DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
+           DeclineMessageRequestButton.setEnabled(false);
+                      }
+
                     }
                 });
     }
@@ -254,86 +262,90 @@ public class GroupesProfileActivity extends AppCompatActivity
 
     private void AcceptChatRequest()
     {
-        ContactsRef.child(senderUserID).child(receiverUserID)
-                .child("Contacts").setValue("Saved")
+        GroupesContactsOfAgroupetRef.child(receiverUserID)
+                .setValue("Saved")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
-                        if (task.isSuccessful())
-                        {
-                            ContactsRef.child(receiverUserID).child(senderUserID)
-                                    .child("Contacts").setValue("Saved")
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            if (task.isSuccessful())
-                                            {
-                                                GroupesRequestsFragmentRef.child(senderUserID).child(receiverUserID)
-                                                        .removeValue()
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task)
-                                                            {
-                                                                if (task.isSuccessful())
-                                                                {
-                                                                    GroupesRequestsFragmentRef.child(receiverUserID).child(senderUserID)
-                                                                            .removeValue()
-                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                                @Override
-                                                                                public void onComplete(@NonNull Task<Void> task)
-                                                                                {
-                                                                                    SendMessageRequestButton.setEnabled(true);
-                                                                                    Current_State = "friends";
-                                                                                    SendMessageRequestButton.setText("Remove this Contact");
 
-                                                                                    DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
-                                                                                    DeclineMessageRequestButton.setEnabled(false);
-                                                                                }
-                                                                            });
-                                                                }
-                                                            }
-                                                        });
-                                            }
-                                        }
-                                    });
-                        }
+                   if (task.isSuccessful())
+                   {
+                  GroupesRequestsFragmentRef.child(GroupeName).
+                    child(senderUserID).child(receiverUserID)
+   .removeValue()
+   .addOnCompleteListener(new OnCompleteListener<Void>() {
+       @Override
+       public void onComplete(@NonNull Task<Void> task)
+       {
+           if (task.isSuccessful())
+                                                  {
+                     GroupesRequestsFragmentRef.child(receiverUserID)
+                             .child(GroupeName)
+        .removeValue()
+        .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task)
+            {
+       SendGroupeRequestButton.setEnabled(true);
+       Current_State = "friends";
+       SendGroupeRequestButton.setText("Remove this Contact From Grouope" + GroupeName);
+
+       DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
+       DeclineMessageRequestButton.setEnabled(false);
+
+       NewUserGroupesRef.child(GroupeName).child("GroupeNameValue").setValue(GroupeName);
+
+       NewUserGroupesRef.child(GroupeName).child("GroupeCreator").setValue(senderUserID);
+
+
+
+                                    }
+                                });
                     }
+                                                   }
+                                               });
+                                   }
+
+                    }
+
+
+
+
                 });
     }
 
 
 
 
-    private void CancelChatRequest()
+    private void CancelGrouopeRequest()
     {
-        GroupesRequestsFragmentRef.child(senderUserID).child(receiverUserID)
+        GroupesRequestsFragmentRef.child(GroupeName).child(senderUserID).child(receiverUserID)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
                         if (task.isSuccessful())
-                        {
-                            GroupesRequestsFragmentRef.child(receiverUserID).child(senderUserID)
-                                    .removeValue()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            if (task.isSuccessful())
-                                            {
-                                                SendMessageRequestButton.setEnabled(true);
-                                                Current_State = "new";
-                                                SendMessageRequestButton.setText("Send Message");
+    {
+        GroupesRequestsFragmentRef.child(receiverUserID).child(GroupeName)
+                .removeValue()
+   .addOnCompleteListener(new OnCompleteListener<Void>() {
+       @Override
+       public void onComplete(@NonNull Task<Void> task)
+       {
+           if (task.isSuccessful())
+           {
+               SendGroupeRequestButton.setEnabled(true);
+               Current_State = "new";
+       SendGroupeRequestButton.setText("Send Groupe invitation");
 
-                                                DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
-                                                DeclineMessageRequestButton.setEnabled(false);
-                                            }
-                                        }
-                                    });
-                        }
+       DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
+       DeclineMessageRequestButton.setEnabled(false);
+                               }
+                           }
+                       });
+           }
                     }
                 });
     }
@@ -341,44 +353,60 @@ public class GroupesProfileActivity extends AppCompatActivity
 
 
 
-    private void SendChatRequest()
+    private void SendGroupeChatRequest()
     {
-        GroupesRequestsFragmentRef.child(senderUserID).child(receiverUserID)
+        GroupesRequestsFragmentRef.child(GroupeName).child(senderUserID)
+                .child(receiverUserID)
                 .child("request_type").setValue("sent")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
                         if (task.isSuccessful())
-                        {
-                            GroupesRequestsFragmentRef.child(receiverUserID).child(senderUserID)
-                                    .child("request_type").setValue("received")
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            if (task.isSuccessful())
-                                            {
-                                                HashMap<String, String> chatNotificationMap = new HashMap<>();
-                                                chatNotificationMap.put("from", senderUserID);
-                                                chatNotificationMap.put("type", "request");
+     {
 
-                                                NotificationRef.child(receiverUserID).push()
-                                                        .setValue(chatNotificationMap)
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task)
-                                                            {
-                                                                if (task.isSuccessful())
-                                                                {
-                                                                    SendMessageRequestButton.setEnabled(true);
-                                                                    Current_State = "request_sent";
-                                                                    SendMessageRequestButton.setText("Cancel Chat Request");
-                                                                }
-                                                            }
-                                                        });
-                                            }
-                                        }
+
+         GroupesRequestsFragmentRef.child(receiverUserID)
+                 .child(GroupeName).child("GroupeCreator").setValue(senderUserID);
+
+         GroupesRequestsFragmentRef.child(receiverUserID)
+                 .child(GroupeName).child("GroupeName").setValue(GroupeName);
+
+
+
+         GroupesRequestsFragmentRef.child(receiverUserID)
+                 .child(GroupeName)
+                 .child("request_type").setValue("received")
+    .addOnCompleteListener(new OnCompleteListener<Void>() {
+        @Override
+        public void onComplete(@NonNull Task<Void> task)
+        {
+            if (task.isSuccessful())
+            {
+         HashMap<String, String> GroupechatNotificationMap = new HashMap<>();
+                GroupechatNotificationMap.put("from", senderUserID);
+                GroupechatNotificationMap.put("type", "request");
+
+                GroupechatNotificationMap.put("groupeName" , GroupeName );
+
+
+
+                GroupesNotificationRef.child(receiverUserID).child(GroupeName).push()
+                     .setValue(GroupechatNotificationMap)
+                     .addOnCompleteListener(new OnCompleteListener<Void>() {
+          @Override
+          public void onComplete(@NonNull Task<Void> task)
+          {
+              if (task.isSuccessful())
+                                                 {
+            SendGroupeRequestButton.setEnabled(true);
+            Current_State = "request_sent";
+            SendGroupeRequestButton.setText("Cancel Grouope Invitition ");
+                       }
+                   }
+                                         });
+                             }
+                         }
                                     });
                         }
                     }

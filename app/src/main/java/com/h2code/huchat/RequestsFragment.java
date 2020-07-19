@@ -163,36 +163,36 @@ holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
                     if (task.isSuccessful())
                     {
                         ContactsRef.child(list_user_id).child(currentUserID).child("Contact")
-                                .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task)
+       .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+   @Override
+   public void onComplete(@NonNull Task<Void> task)
+   {
+       if (task.isSuccessful())
+       {
+           ChatRequestsRef.child(currentUserID).child(list_user_id)
+                   .removeValue()
+                   .addOnCompleteListener(new OnCompleteListener<Void>() {
+           @Override
+           public void onComplete(@NonNull Task<Void> task)
+           {
+               if (task.isSuccessful())
+               {
+                   ChatRequestsRef.child(list_user_id).child(currentUserID)
+                           .removeValue()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task)
                             {
-                                if (task.isSuccessful())
-                                {
-                                    ChatRequestsRef.child(currentUserID).child(list_user_id)
-                                            .removeValue()
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task)
-                                                {
-                                                    if (task.isSuccessful())
-                                                    {
-                                                        ChatRequestsRef.child(list_user_id).child(currentUserID)
-                                                                .removeValue()
-                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                    @Override
-                                                                    public void onComplete(@NonNull Task<Void> task)
-                                                                    {
-                                                                        if (task.isSuccessful())
-                                                                        {
-                                                                            Toast.makeText(getContext(), "New Contact Saved", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    }
-                                                                });
-                                                    }
-                                                }
-                                            });
-                                }
+              if (task.isSuccessful())
+              {
+                  Toast.makeText(getContext(), "New Contact Saved", Toast.LENGTH_SHORT).show();
+              }
+          }
+                                              });
+                                  }
+                              }
+                          });
+              }
                             }
                         });
                     }

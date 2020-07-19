@@ -72,7 +72,8 @@ public class GroupsFragment extends Fragment
 
         GroupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
 
-        groupeRootREF2= FirebaseDatabase.getInstance().getReference().child("GroupesMainActivity").child("Groupes").child(currentUserID);
+        groupeRootREF2= FirebaseDatabase.getInstance().getReference()
+                .child("GroupesMainActivity").child("Groupes");
 
 
         UserGroupesRef = FirebaseDatabase.getInstance().getReference()
@@ -227,9 +228,9 @@ public class GroupsFragment extends Fragment
     {
 
 
-        // groupeRootREF2.child(groupName).setvalue("").addOncomplete...
+         groupeRootREF2.child(currentUserID).child(groupName).child("GroupeName").setValue(groupName);
 
-        groupeRootREF2.child(groupName).child("GroupeCreator")
+        groupeRootREF2.child(currentUserID).child(groupName).child("GroupeCreator")
                 .setValue(currentUserID)
 
 
@@ -245,8 +246,8 @@ public class GroupsFragment extends Fragment
                 });
 
 
-        UserGroupesRef.child(groupName).setValue(groupName);
-
+        UserGroupesRef.child(groupName).child("GroupeName").setValue(groupName);
+        UserGroupesRef.child(groupName).child("GroupeCreator").setValue(currentUserID);
 
     }
 

@@ -339,17 +339,18 @@ public class ProfileActivity extends AppCompatActivity
                     {
                         if (task.isSuccessful())
                         {
-                            ChatRequestRef.child(receiverUserID).child(senderUserID)
-                                    .child("request_type").setValue("received")
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task)
-                            {
-                                if (task.isSuccessful())
-                         {
-                             HashMap<String, String> chatNotificationMap = new HashMap<>();
-                             chatNotificationMap.put("from", senderUserID);
-                             chatNotificationMap.put("type", "request");
+         ChatRequestRef.child(receiverUserID).child(senderUserID)
+                 .child("request_type").setValue("received")
+                 .addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task)
+         {
+             if (task.isSuccessful())
+      {
+          HashMap<String, String> chatNotificationMap = new HashMap<>();
+          chatNotificationMap.put("from", senderUserID);
+          chatNotificationMap.put("type", "request");
+
 
                       NotificationRef.child(receiverUserID).push()
                               .setValue(chatNotificationMap)
