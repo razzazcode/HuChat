@@ -61,7 +61,7 @@ public class GroupesTabAccessorAdapter extends FragmentPagerAdapter
             case 2:
                 return "Groupes \n Contacts";
 
-          
+
 
             default:
                 return null;

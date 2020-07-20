@@ -41,8 +41,8 @@ public class GroupeChat2 extends AppCompatActivity
 
     private FirebaseAuth mAuth;
     private DatabaseReference GroupeRootRef , RootRef , UserGroupesRef;
-    private String currentUserID , CurrentgroupeName , CurrentGroupeCreatorId;
-
+    private String currentUserID , CurrentgroupeName ;
+public String CurrentGroupeCreatorId ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -87,7 +87,8 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
 
-        GettingGroupeCreatorId();
+
+      //  GettingGroupeCreatorId();
 
 
 
@@ -107,14 +108,16 @@ FirebaseApp.initializeApp(MainActivity.this);
 
     private void GettingGroupeCreatorId() {
 
-
-        UserGroupesRef.child(CurrentgroupeName).addValueEventListener(new ValueEventListener() {
+        UserGroupesRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(currentUserID).child("OwnGrpName");
+ UserGroupesRef.child(CurrentgroupeName)
+         .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild("GroupeCreatorId")) {
+                if (dataSnapshot.hasChild("GroupeCreator")) {
 
-                    CurrentGroupeCreatorId = dataSnapshot.child("GroupeCreatorId")
+                    CurrentGroupeCreatorId = dataSnapshot.child("GroupeCreator")
                             .getValue().toString();
 
                 }
@@ -128,6 +131,15 @@ FirebaseApp.initializeApp(MainActivity.this);
 
             }
         });
+
+        String  CurrentGroupeCreatorId2= CurrentGroupeCreatorId ;
+        Bundle grpcreatorbundle = new Bundle();
+
+        grpcreatorbundle.putString("GroupeCreatorId" ,CurrentGroupeCreatorId2 );
+
+        GroupesChatsFragment grocreatorid = new GroupesChatsFragment();
+
+        grocreatorid.setArguments(grpcreatorbundle);
 
 
     }
@@ -171,9 +183,9 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onCreateOptionsMenu(menu);
 
-      //  if (currentUserID == CurrentGroupeCreatorId ) {
+        if (currentUserID == CurrentGroupeCreatorId ) {
 
-            getMenuInflater().inflate(R.menu.groupes_menu, menu);
+            getMenuInflater().inflate(R.menu.groupes_menu, menu); }
 
         return true;
     }

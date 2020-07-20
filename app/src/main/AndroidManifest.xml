@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GroupeFindFriendsActivity"></activity>
+        <activity android:name=".GroupeSChatSActivity"></activity>
+        <activity android:name=".GroupeFindFriendsActivity" />
         <activity android:name=".GroupesProfileActivity" />
         <activity android:name=".GroupesSettingsActivity" />
         <activity android:name=".GroupeChat2" />
