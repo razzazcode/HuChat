@@ -239,7 +239,7 @@ InfoOfCreator();
         if (!senderUserID.equals(receiverUserID))
         {
 
-            SendGroupeRequestButton.setText(" Send Groupe Invitation");
+            SendGroupeRequestButton.setText("Send Groupe Invitation");
 
             SendGroupeRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -278,6 +278,9 @@ InfoOfCreator();
 
     private void RemoveSpecificContact()
     {
+
+        NewUserGroupesRef.child(GroupeName).removeValue();
+
         GroupesContactsOfAgroupetRef.child(receiverUserID)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -289,7 +292,7 @@ InfoOfCreator();
        {
            SendGroupeRequestButton.setEnabled(true);
            Current_State = "new";
-           SendGroupeRequestButton.setText("Send Message");
+           SendGroupeRequestButton.setText("Send Groupe Invitation");
 
            DeclineMessageRequestButton.setVisibility(View.INVISIBLE);
            DeclineMessageRequestButton.setEnabled(false);

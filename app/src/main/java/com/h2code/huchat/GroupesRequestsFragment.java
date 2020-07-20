@@ -242,7 +242,7 @@ final String  GroupeCreatorUserName = dataSnapshot.child("GroupeCreatorUserName"
 
                     UsersRef  .child(currentUserID).child("OwnGrpName")
                                   .child(list_GroupeNmae)
-                            .child("GroupeCreatorId").setValue(requestGroupeCreator);
+                            .child("GroupeCreator").setValue(requestGroupeCreator);
 
              GroupesRequestsFragmentRef.child(list_GroupeNmae)
                      .child(requestGroupeCreator).child(currentUserID)
