@@ -88,7 +88,6 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
 
-      //  GettingGroupeCreatorId();
 
 
 
@@ -183,9 +182,9 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onCreateOptionsMenu(menu);
 
-        if (currentUserID == CurrentGroupeCreatorId ) {
+      //  if (currentUserID == CurrentGroupeCreatorId ) {
 
-            getMenuInflater().inflate(R.menu.groupes_menu, menu); }
+            getMenuInflater().inflate(R.menu.groupes_menu, menu);
 
         return true;
     }

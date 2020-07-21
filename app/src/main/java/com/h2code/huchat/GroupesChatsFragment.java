@@ -26,7 +26,7 @@ public class GroupesChatsFragment extends Fragment
 
 {
 
-    private String CurrentgroupeName , currentUserID , CurrentGroupeCreatorId ;
+    private String CurrentgroupeName , currentUserID , CurrentUserName , CurrentGroupeCreatorId ;
 
     private Button GoToChat ;
     private View PrivateChatsView;
@@ -64,7 +64,7 @@ public class GroupesChatsFragment extends Fragment
 
       //  CurrentGroupeCreatorId = getArguments().getString("GroupeCreatorId");
         GetUserInfo();
-        GoToChat.setText(CurrentgroupeName);
+        GoToChat.setText(" Start Chating with Friends in \n "  + CurrentgroupeName + " \n Groupe");
 
 
         System.out.println("henna henna");
@@ -76,9 +76,12 @@ public class GroupesChatsFragment extends Fragment
 
 
 
-                Intent GroupeSChatSActivity = new Intent(getContext(), GroupeSChatSActivity.class);
+                Intent GroupeSChatSActivity = new Intent(getContext(), GroupesAdvancedChatActivity.class);
 
                 GroupeSChatSActivity.putExtra("CurrentgroupeName", CurrentgroupeName);
+
+                GroupeSChatSActivity.putExtra("CurrentUserName", CurrentUserName);
+
 
                 GroupeSChatSActivity.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
 
@@ -99,6 +102,8 @@ public class GroupesChatsFragment extends Fragment
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+
+                    CurrentUserName = dataSnapshot.child("name").getValue().toString();
 
                     CurrentGroupeCreatorId = dataSnapshot.child("OwnGrpName").child(CurrentgroupeName).child("GroupeCreator").getValue().toString();
 

@@ -268,8 +268,8 @@ startActivityForResult(intent.createChooser(intent, "Select Ms Word File"), 435)
      {
 
 
-loadingBar.setTitle("Sending file Image");
-loadingBar.setMessage("Please wait, your image is uploading...");
+loadingBar.setTitle("Sending file ");
+loadingBar.setMessage("Please wait, your File is uploading...");
 loadingBar.setCanceledOnTouchOutside(false);
 loadingBar.show();
 
@@ -344,75 +344,6 @@ if (!checker.equals("image")) {
     });
 
 
-/* filePath.putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-    @Override
-    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
-    { */
-/*
-    uploadTask = filePath.putFile(fileUri);
-
-    uploadTask.continueWithTask(new Continuation() {
-        @Override
-        public Object then(@NonNull Task task) throws Exception {
-
-            if (!task.isSuccessful()) {
-
-                throw task.getException();
-            }
-
-            return filePath.getDownloadUrl();
-        }
-    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-        @Override
-        public void onComplete(@NonNull Task<Uri> task) {
-
-
-
-
-
-
-            if(task.isSuccessful()){
-
-
-            Map messageimageBody = new HashMap();
-            messageimageBody.put("message", task.getResult().toString()
-            );
-
-            messageimageBody.put("name", fileUri.getLastPathSegment());
-
-
-
-                messageimageBody.put("type", checker);
-
-
-
-                messageimageBody.put("from", messageSenderID);
-            messageimageBody.put("to", messageReceiverID);
-            messageimageBody.put("messageID", messagePushID);
-            messageimageBody.put("time", saveCurrentTime);
-            messageimageBody.put("date", saveCurrentDate);
-
-            Map messageBodyDetails = new HashMap();
-            messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageimageBody);
-            messageBodyDetails.put( messageReceiverRef + "/" + messagePushID, messageimageBody);
-
-
-            RootRef.updateChildren(messageBodyDetails);
-            loadingBar.dismiss();
-
-
-        }
-
-
-    }
-}).addOnFailureListener(new OnFailureListener() {
-        @Override
-        public void onFailure(@NonNull Exception e) {
-            loadingBar.dismiss();
-            Toast.makeText(ChatActivity.this , e.getMessage() +
-                    " failed to download file " , Toast.LENGTH_SHORT).show();
-        }
-    }); */
 
 
          }
