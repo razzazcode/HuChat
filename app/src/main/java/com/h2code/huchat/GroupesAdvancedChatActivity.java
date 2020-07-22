@@ -29,6 +29,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,6 +39,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,7 +72,7 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
 
     private final List<Messages> messagesList = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
-    private MessageAdapter messageAdapter;
+    private GroupesMessageAdapter groupeMessageAdapter;
     private RecyclerView userMessagesList;
 
 
@@ -86,7 +90,7 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_groupe_s_chat_s);
+        setContentView(R.layout.activity_groupes_advanced_chat);
 
         System.out.println("henna henna HAHAHAHAHA HAHAAHAHHA HAHAAHAHA");
 
@@ -110,9 +114,9 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
         IntializeControllers();
 
         userName.setText(currentGroupName);
-  //      Picasso.get().load(messageReceiverImage).placeholder(R.drawable.profile_image).into(userImage);
+      // Picasso.get().load().placeholder(R.drawable.profile_image).into(userImage);
 
-
+userImage.setImageResource(R.drawable.profile_image);
 
 
         SendMessageButton.setOnClickListener(new View.OnClickListener() {
@@ -259,11 +263,11 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
         SendFilesButton = (ImageButton) findViewById(R.id.send_files_btnGCA);
         MessageInputText = (EditText) findViewById(R.id.input_messageGCA);
 
-        messageAdapter = new MessageAdapter(messagesList);
+        GroupesMessageAdapter = new MessageAdapter(messagesList);
         userMessagesList = (RecyclerView) findViewById(R.id.private_messages_list_of_usersGCA);
         linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setLayoutManager(linearLayoutManager);
-        userMessagesList.setAdapter(messageAdapter);
+        userMessagesList.setAdapter(GroupesMessageAdapter);
 
 
         loadingBar = new ProgressDialog(this);
@@ -498,6 +502,49 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
     }
 
 
+
+
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        groupeRootREF2.child("Messages").child(currentUserID)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+                        Messages messages = dataSnapshot.getValue(Messages.class);
+
+                        messagesList.add(messages);
+
+                        GroupesMessageAdapter.notifyDataSetChanged();
+
+                        userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
 
 
 

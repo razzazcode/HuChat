@@ -126,7 +126,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             {
                 messageViewHolder.senderMessageText.setVisibility(View.VISIBLE);
 
-                messageViewHolder.senderMessageText.setBackgroundResource(R.drawable.sender_messages_layout);
+             //   messageViewHolder.senderMessageText.setBackgroundResource(R.drawable.sender_messages_layout);
                 messageViewHolder.senderMessageText.setTextColor(Color.BLACK);
                 messageViewHolder.senderMessageText
                         .setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
@@ -136,7 +136,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.receiverProfileImage.setVisibility(View.VISIBLE);
                 messageViewHolder.receiverMessageText.setVisibility(View.VISIBLE);
 
-                messageViewHolder.receiverMessageText.setBackgroundResource(R.drawable.receiver_messages_layout);
+              //  messageViewHolder.receiverMessageText.setBackgroundResource(R.drawable.receiver_messages_layout);
                 messageViewHolder.receiverMessageText.setTextColor(Color.BLACK);
                 messageViewHolder.receiverMessageText.setText(messages.getMessage() + "\n \n" + messages.getTime() + " - " + messages.getDate());
             }
@@ -371,66 +371,66 @@ builder.show();
 
                         CharSequence options [] = new CharSequence[] {
 
-                                "Delete For Me Only" ,
-                                "Download and View Image" ,
+                "Delete For Me Only" ,
+                "Download and View Image" ,
 
-                                " Cancel " ,
+                " Cancel " ,
 
-                                " Delete For Every One "
+                " Delete For Every One "
 
-                        };
+        };
 
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(messageViewHolder.itemView.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(messageViewHolder.itemView.getContext());
 
-                        builder.setTitle("Delete Message");
+        builder.setTitle("Delete Message");
 
                         builder.setItems(options, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+  public void onClick(DialogInterface dialog, int which) {
 
 
-                                if (which == 0){
+      if (which == 0){
 
-                                    deleteSentMessages(i , messageViewHolder);
-
-
-                                    Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
+          deleteSentMessages(i , messageViewHolder);
 
 
-                                    messageViewHolder.itemView.getContext().startActivity(intent);
+          Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
 
 
-                                }
-
-                                else  if (which == 1) {
-
-                                    Intent intent = new Intent(messageViewHolder.itemView.getContext(),  imageViewerActivity.class);
-
-                                    intent.putExtra("url" , userMessagesList.get(i).getMessage());
-
-                                    messageViewHolder.itemView.getContext().startActivity(intent);
+          messageViewHolder.itemView.getContext().startActivity(intent);
 
 
-                                }
+      }
+
+      else  if (which == 1) {
+
+          Intent intent = new Intent(messageViewHolder.itemView.getContext(),  imageViewerActivity.class);
+
+          intent.putExtra("url" , userMessagesList.get(i).getMessage());
+
+          messageViewHolder.itemView.getContext().startActivity(intent);
 
 
-
-                                else  if (which == 3) {
-
-
-                                    deletetMessagesForAll(i , messageViewHolder);
+      }
 
 
 
-                                    Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
+      else  if (which == 3) {
 
 
-                                    messageViewHolder.itemView.getContext().startActivity(intent);
+          deletetMessagesForAll(i , messageViewHolder);
 
 
 
-                                }
+          Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
+
+
+          messageViewHolder.itemView.getContext().startActivity(intent);
+
+
+
+      }
 
 
                             }
