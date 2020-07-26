@@ -263,11 +263,11 @@ userImage.setImageResource(R.drawable.profile_image);
         SendFilesButton = (ImageButton) findViewById(R.id.send_files_btnGCA);
         MessageInputText = (EditText) findViewById(R.id.input_messageGCA);
 
-        GroupesMessageAdapter = new MessageAdapter(messagesList);
+        groupeMessageAdapter = new GroupesMessageAdapter(messagesList);
         userMessagesList = (RecyclerView) findViewById(R.id.private_messages_list_of_usersGCA);
         linearLayoutManager = new LinearLayoutManager(this);
         userMessagesList.setLayoutManager(linearLayoutManager);
-        userMessagesList.setAdapter(GroupesMessageAdapter);
+        userMessagesList.setAdapter(groupeMessageAdapter);
 
 
         loadingBar = new ProgressDialog(this);
@@ -327,7 +327,7 @@ userImage.setImageResource(R.drawable.profile_image);
               //  final String messageReceiverRef = "Messages/" + messageReceiverID + "/" + messageSenderID;
 
                 DatabaseReference userMessageKeyRef = groupeRootREF2.child("Messages")
-                        .child(currentUserID).push();
+                       .push();
 
                 final    String messagePushID = userMessageKeyRef.getKey();
 
@@ -344,33 +344,34 @@ userImage.setImageResource(R.drawable.profile_image);
                             public void onSuccess(Uri uri) {
                                 String downloadUrl = uri.toString();
 
-                                Map messageDocsBody = new HashMap();
-                                messageDocsBody.put("message",downloadUrl);
-                                messageDocsBody.put("name",fileUri.getLastPathSegment());
-                                messageDocsBody.put("type",checker);
+            Map messageDocsBody = new HashMap();
+            messageDocsBody.put("message",downloadUrl);
+            messageDocsBody.put("name",fileUri.getLastPathSegment());
+            messageDocsBody.put("type",checker);
+            messageDocsBody.put("groupeCreatorId", GroupeCreatorId);
 
-                                messageDocsBody.put("from",currentUserID);
-                               // messageDocsBody.put("to", messageReceiverID);
-                                messageDocsBody.put("messageID", messagePushID);
-                                messageDocsBody.put("time", saveCurrentTime);
-                                messageDocsBody.put("date", saveCurrentDate);
+            messageDocsBody.put("from",currentUserID);
+            messageDocsBody.put("to", currentGroupName);
+            messageDocsBody.put("messageID", messagePushID);
+            messageDocsBody.put("time", saveCurrentTime);
+            messageDocsBody.put("date", saveCurrentDate);
 
 
-                                Map messageBodyDDetail = new HashMap();
-                                messageBodyDDetail.put(messageSenderRef + "/" + messagePushID, messageDocsBody);
-                             //   messageBodyDDetail.put(messageReceiverRef + "/" + messagePushID, messageDocsBody);
+            Map messageBodyDDetail = new HashMap();
+            messageBodyDDetail.put("Messages" + "/" + messagePushID, messageDocsBody);
+         //   messageBodyDDetail.put(messageReceiverRef + "/" + messagePushID, messageDocsBody);
 
-                                groupeRootREF2.updateChildren(messageBodyDDetail);
-                                loadingBar.dismiss();
+            groupeRootREF2.updateChildren(messageBodyDDetail);
+            loadingBar.dismiss();
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                loadingBar.dismiss();
-                                Toast.makeText(GroupesAdvancedChatActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+        }
+    }).addOnFailureListener(new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            loadingBar.dismiss();
+            Toast.makeText(GroupesAdvancedChatActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    });
                     }
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -398,7 +399,7 @@ userImage.setImageResource(R.drawable.profile_image);
               //  final String messageReceiverRef = "Messages/" + messageReceiverID + "/" + messageSenderID;
 
                 DatabaseReference userMessageKeyRef = groupeRootREF2.child("Messages")
-                        .child(currentUserID).push();
+                        .push();
 
                 final    String messagePushID = userMessageKeyRef.getKey();
 
@@ -440,16 +441,17 @@ userImage.setImageResource(R.drawable.profile_image);
 
    messageimageBody.put("name", fileUri.getLastPathSegment());
 
+         messageimageBody.put("groupeCreatorId", GroupeCreatorId);
 
    messageimageBody.put("type", checker);
    messageimageBody.put("from", currentUserID);
- //  messageimageBody.put("to", messageReceiverID);
+   messageimageBody.put("to", currentGroupName);
    messageimageBody.put("messageID", messagePushID);
    messageimageBody.put("time", saveCurrentTime);
    messageimageBody.put("date", saveCurrentDate);
 
    Map messageBodyDetails = new HashMap();
-   messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageimageBody);
+   messageBodyDetails.put("Messages" + "/" + messagePushID, messageimageBody);
   // messageBodyDetails.put( messageReceiverRef + "/" + messagePushID, messageimageBody);
 
    groupeRootREF2.updateChildren(messageBodyDetails).addOnCompleteListener(new OnCompleteListener() {
@@ -510,16 +512,39 @@ userImage.setImageResource(R.drawable.profile_image);
     {
         super.onStart();
 
-        groupeRootREF2.child("Messages").child(currentUserID)
+        groupeRootREF2.child("Messages")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s)
                     {
+
+                        {
+                            if (dataSnapshot.hasChild("from"))
+                            {
+                                String senderUserId = dataSnapshot.child("from").getValue().toString();
+                                if ( senderUserId .equals(currentUserId)
+                                ) {
+
+                                    deletetMessagesForAll(i , messageViewHolder);
+
+
+                                }
+
+                                else {
+
+                                    Toast.makeText(messageViewHolder.itemView.getContext()
+                                            ,"Error Deleting Message" , Toast.LENGTH_SHORT);
+
+
+                                }
+
+                            }
+
                         Messages messages = dataSnapshot.getValue(Messages.class);
 
                         messagesList.add(messages);
 
-                        GroupesMessageAdapter.notifyDataSetChanged();
+                        groupeMessageAdapter.notifyDataSetChanged();
 
                         userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
                     }
@@ -565,21 +590,24 @@ userImage.setImageResource(R.drawable.profile_image);
           //  String messageReceiverRef = "Messages/" + GroupeCreatorId + "/" + messageSenderID;
 
             DatabaseReference GroupeMessageKeyRef = groupeRootREF2.child("Messages")
-                    .child(currentUserID).push();
+                    .push();
 
             String messagePushID = GroupeMessageKeyRef.getKey();
 
             Map messageTextBody = new HashMap();
             messageTextBody.put("message", messageText);
-            messageTextBody.put("type", "text");
+            messageTextBody.put("groupeCreatorId", GroupeCreatorId);
+
+      messageTextBody.put("type", "text");
+
             messageTextBody.put("from", currentUserID);
-          //  messageTextBody.put("to", messageReceiverID);
+            messageTextBody.put("to", currentGroupName);
             messageTextBody.put("messageID", messagePushID);
             messageTextBody.put("time", saveCurrentTime);
             messageTextBody.put("date", saveCurrentDate);
 
             Map messageBodyDetails = new HashMap();
-            messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageTextBody);
+            messageBodyDetails.put("Messages/" + messagePushID, messageTextBody);
           //  messageBodyDetails.put( messageReceiverRef + "/" + messagePushID, messageTextBody);
 
             groupeRootREF2.updateChildren(messageBodyDetails).addOnCompleteListener(new OnCompleteListener() {

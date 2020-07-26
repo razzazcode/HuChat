@@ -89,7 +89,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String fromUserID = messages.getFrom();
         String fromMessageType = messages.getType();
 
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(fromUserID);
+        usersRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(fromUserID);
 
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -249,10 +250,10 @@ deleteSentMessages(i , messageViewHolder);
 
 
 
-                   Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
+      Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
 
 
-                   messageViewHolder.itemView.getContext().startActivity(intent);
+      messageViewHolder.itemView.getContext().startActivity(intent);
 
 
 
