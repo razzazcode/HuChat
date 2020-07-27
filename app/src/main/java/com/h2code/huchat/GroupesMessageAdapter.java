@@ -84,7 +84,9 @@ public class GroupesMessageAdapter extends RecyclerView.Adapter<GroupesMessageAd
 
 
     @Override
-    public void onBindViewHolder(@NonNull final MessageViewHolder messageViewHolder, final int i)
+    public void onBindViewHolder
+            (@NonNull final MessageViewHolder messageViewHolder,
+                                 final int i)
     {
         String messageSenderId = mAuth.getCurrentUser().getUid();
         Messages messages = userMessagesList.get(i);
