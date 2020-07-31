@@ -219,8 +219,8 @@ Picasso.get()
                 public void onClick(View v) {
 
 
-                  if (userMessagesList.get(i).getType().equals("pdf")
-                          || userMessagesList.get(i).getType().equals("docx") ){
+     if (userMessagesList.get(i).getType().equals("pdf")
+             || userMessagesList.get(i).getType().equals("docx") ){
 
 CharSequence options [] = new CharSequence[] {
 

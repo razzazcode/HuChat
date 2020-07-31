@@ -49,7 +49,7 @@ public class GroupsFragment extends Fragment
 
     private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef , UserssRef;
 
-    private String currentUserID , GroupeCreatorUserName;
+    private String currentUserID , GroupeCreatorUserName , currentGroupName , GroupeCreatorUserID = "6GEfJvKo3wX3Yia7AOVFzkroPOj1" ;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
 
@@ -118,19 +118,11 @@ public class GroupsFragment extends Fragment
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
             {
-                String currentGroupName = adapterView.getItemAtPosition(position).toString();
-
-                Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
-                groupChatIntent.putExtra("groupName" , currentGroupName);
+                currentGroupName = adapterView.getItemAtPosition(position).toString();
 
 
+                GettingCurrentGroupeCreatorID();
 
-
-
-
-                //  groupChatIntent.putExtra("groupCreatorName" , groupeCreatorId);
-
-                startActivity(groupChatIntent);
             }
         });
 
@@ -138,10 +130,51 @@ public class GroupsFragment extends Fragment
         return groupFragmentView;
     }
 
+    private void GettingCurrentGroupeCreatorID() {
+
+
+        UserGroupesRef.child(currentGroupName)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.hasChild("GroupeCreator")) {
+
+                            GroupeCreatorUserID = dataSnapshot.child("GroupeCreator")
+                                    .getValue().toString();
+
+
+
+
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
+
+        Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
+        groupChatIntent.putExtra("groupName" , currentGroupName);
+
+
+        groupChatIntent.putExtra("GroupeCreatorID" , GroupeCreatorUserID);
+
+
+        startActivity(groupChatIntent);
+
+    }
+
+
     private void GettingCreatorUserName() {
 
 
-        UserssRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+ UserssRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

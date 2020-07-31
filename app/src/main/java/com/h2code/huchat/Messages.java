@@ -2,7 +2,8 @@ package com.h2code.huchat;
 
 public class Messages
 {
-    private String from, message, type, to, messageID, time, date, name , groupeCreatorId;
+    private String from, message, type, to, messageID, time,
+            date, name , groupeCreatorId;
 
     public Messages()
     {
@@ -11,9 +12,11 @@ public class Messages
 
 
 
+
     public Messages(String from, String message,
                     String type, String to, String messageID,
-                    String time, String date, String name , String groupeCreatorId) {
+                    String time, String date, String name
+           , String groupeCreatorId) {
         this.from = from;
         this.message = message;
         this.type = type;
@@ -97,6 +100,10 @@ public class Messages
     public void setGroupeCreatorId(String groupeCreatorId) {
         this.groupeCreatorId = groupeCreatorId;
     }
+
+
+
+
 
 
 }

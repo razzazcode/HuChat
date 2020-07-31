@@ -469,34 +469,34 @@ else if (checker.equals("image")) {
     {
         RootRef.child("Users").child(messageReceiverID)
                 .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot)
-                    {
-                        if (dataSnapshot.child("userState").hasChild("state"))
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot)
+         {
+             if (dataSnapshot.child("userState").hasChild("state"))
+             {
+            String state = dataSnapshot.child("userState").child("state").getValue().toString();
+            String date = dataSnapshot.child("userState").child("date").getValue().toString();
+            String time = dataSnapshot.child("userState").child("time").getValue().toString();
+
+            if (state.equals("online"))
+            {
+                userLastSeen.setText("online");
+            }
+            else if (state.equals("offline"))
+            {
+                userLastSeen.setText("Last Seen: " + date + " " + time);
+            }
+        }
+        else
                         {
-                            String state = dataSnapshot.child("userState").child("state").getValue().toString();
-                            String date = dataSnapshot.child("userState").child("date").getValue().toString();
-                            String time = dataSnapshot.child("userState").child("time").getValue().toString();
+            userLastSeen.setText("offline");
+        }
+    }
 
-                            if (state.equals("online"))
-                            {
-                                userLastSeen.setText("online");
-                            }
-                            else if (state.equals("offline"))
-                            {
-                                userLastSeen.setText("Last Seen: " + date + " " + time);
-                            }
-                        }
-                        else
-                        {
-                            userLastSeen.setText("offline");
-                        }
-                    }
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
+    }
                 });
     }
 
@@ -508,37 +508,37 @@ else if (checker.equals("image")) {
 
         RootRef.child("Messages").child(messageSenderID).child(messageReceiverID)
                 .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                    {
-                        Messages messages = dataSnapshot.getValue(Messages.class);
+     @Override
+     public void onChildAdded(DataSnapshot dataSnapshot, String s)
+     {
+         Messages messages = dataSnapshot.getValue(Messages.class);
 
-                        messagesList.add(messages);
+         messagesList.add(messages);
 
-                        messageAdapter.notifyDataSetChanged();
+         messageAdapter.notifyDataSetChanged();
 
-                        userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
-                    }
+         userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
+     }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+     @Override
+     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    }
+     }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    }
+    }
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    }
+    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
 
-                    }
+    }
                 });
     }
 

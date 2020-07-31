@@ -514,58 +514,69 @@ userImage.setImageResource(R.drawable.profile_image);
 
         groupeRootREF2.child("Messages")
                 .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
-                    {
-
-                        {
-                            if (dataSnapshot.hasChild("from"))
-                            {
-                                String senderUserId = dataSnapshot.child("from").getValue().toString();
-                                if ( senderUserId .equals(currentUserId)
-                                ) {
-
-                                    deletetMessagesForAll(i , messageViewHolder);
+   @Override
+   public void onChildAdded(DataSnapshot dataSnapshot, String s)
+   {
 
 
-                                }
-
-                                else {
-
-                                    Toast.makeText(messageViewHolder.itemView.getContext()
-                                            ,"Error Deleting Message" , Toast.LENGTH_SHORT);
 
 
-                                }
 
-                            }
 
-                        Messages messages = dataSnapshot.getValue(Messages.class);
 
-                        messagesList.add(messages);
 
-                        groupeMessageAdapter.notifyDataSetChanged();
 
-                        userMessagesList.smoothScrollToPosition(userMessagesList.getAdapter().getItemCount());
-                    }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    }
+           if (!dataSnapshot.hasChild(currentUserID))
+           {
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+      Messages messages = dataSnapshot.getValue(Messages.class);
 
-                    }
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    }
+     messagesList.add(messages);
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+     groupeMessageAdapter.notifyDataSetChanged();
+
+     userMessagesList.smoothScrollToPosition(userMessagesList
+             .getAdapter().getItemCount());
+
+                 }
+
+
+/*
+     Messages messages = dataSnapshot.getValue(Messages.class);
+
+
+
+     messagesList.add(messages);
+
+     groupeMessageAdapter.notifyDataSetChanged();
+
+     userMessagesList.smoothScrollToPosition(userMessagesList
+             .getAdapter().getItemCount());
+
+     */
+ }
+
+ @Override
+ public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+ }
+
+ @Override
+ public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+ }
+
+ @Override
+ public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+ }
+
+ @Override
+ public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });

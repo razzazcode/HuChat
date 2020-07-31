@@ -152,11 +152,11 @@ public class GroupesMessageAdapter extends RecyclerView.Adapter<GroupesMessageAd
         {
             if (fromUserID.equals(messageSenderId)){
 
-                messageViewHolder.messageSenderPicture.setVisibility(View.VISIBLE);
+    messageViewHolder.messageSenderPicture.setVisibility(View.VISIBLE);
 
-                Picasso.get()
-                        .load(messages.getMessage())
-                        .into(messageViewHolder.messageSenderPicture);
+    Picasso.get()
+            .load(messages.getMessage())
+            .into(messageViewHolder.messageSenderPicture);
 
             }
 
@@ -306,11 +306,11 @@ public class GroupesMessageAdapter extends RecyclerView.Adapter<GroupesMessageAd
   }
 
 
-                    else          if (userMessagesList.get(i).getType().equals("text") ){
+        else   if (userMessagesList.get(i).getType().equals("text") ){
 
         CharSequence options [] = new CharSequence[] {
 
-                "Delete For Me Only" ,
+                "Delete text For Me Only" ,
 
                 " Cancel " ,
 
@@ -330,7 +330,7 @@ public class GroupesMessageAdapter extends RecyclerView.Adapter<GroupesMessageAd
 
      if (which == 0){
 
-         deleteSentMessages(i , messageViewHolder);
+         deletetMessagesForMe(i , messageViewHolder);
 
 
          Intent intent = new Intent(messageViewHolder.itemView.getContext(),  MainActivity.class);
@@ -783,10 +783,12 @@ else {
                 .child("GroupesMainActivity")
                 .child("Groupes") .child(userMessagesList.get(i).getGroupeCreatorId())
                 .child(userMessagesList.get(i).getTo());
+
         groupeRootREF2.child("Messages")
 
                 .child(userMessagesList.get(i).getMessageID())
-                .child(currentUserId).setValue("deletedForMe").addOnCompleteListener(new OnCompleteListener<Void>() {
+                .child(currentUserId)
+                .setValue(currentUserId).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 

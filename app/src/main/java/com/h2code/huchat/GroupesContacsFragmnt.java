@@ -37,9 +37,9 @@ public class GroupesContacsFragmnt extends Fragment
     private View ContactsView;
     private RecyclerView myContactsList;
 
-    private DatabaseReference ContacsRef, UsersRef;
+    private DatabaseReference ContacsRef, UsersRef , GroupesUsersRef , CurrentGroupeContacsRef;
     private FirebaseAuth mAuth;
-    private String currentUserID , CurrentgroupeName;
+    private String currentUserID , CurrentgroupeName , GroupeCreatorID;
 
 
     public GroupesContacsFragmnt() {
@@ -63,11 +63,24 @@ public class GroupesContacsFragmnt extends Fragment
 
 
         CurrentgroupeName = getActivity().getIntent().getExtras().get("groupName").toString();
+        GroupeCreatorID =  getActivity().getIntent().getExtras().get("GroupeCreatorID").toString();
 
 
 
-        ContacsRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(currentUserID);
+        GroupesUsersRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users").child(currentUserID).child("OwnGrpName")
+                .child(CurrentgroupeName);
+
+        CurrentGroupeContacsRef = FirebaseDatabase.getInstance().getReference()
+                .child("GroupesMainActivity").child("Groupes")
+                .child(GroupeCreatorID).child(CurrentgroupeName)
+        .child("ContactsOfTheGroupe");
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+
+
+
 
 
         return ContactsView;
@@ -81,7 +94,7 @@ public class GroupesContacsFragmnt extends Fragment
 
         FirebaseRecyclerOptions options =
                 new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(ContacsRef, Contacts.class)
+                        .setQuery(CurrentGroupeContacsRef, Contacts.class)
                         .build();
 
 
@@ -179,6 +192,14 @@ public class GroupesContacsFragmnt extends Fragment
         myContactsList.setAdapter(adapter);
         adapter.startListening();
     }
+
+
+
+
+
+
+
+
 
 
 
