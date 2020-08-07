@@ -37,9 +37,9 @@ public class GroupesContacsFragmnt extends Fragment
     private View ContactsView;
     private RecyclerView myContactsList;
 
-    private DatabaseReference ContacsRef, UsersRef , GroupesUsersRef , CurrentGroupeContacsRef;
+    private DatabaseReference ContacsRef, UsersRef , GroupesUsersRef;
     private FirebaseAuth mAuth;
-    private String currentUserID , CurrentgroupeName , GroupeCreatorID;
+    private String currentUserID , CurrentgroupeName;
 
 
     public GroupesContacsFragmnt() {
@@ -63,25 +63,15 @@ public class GroupesContacsFragmnt extends Fragment
 
 
         CurrentgroupeName = getActivity().getIntent().getExtras().get("groupName").toString();
-        GroupeCreatorID =  getActivity().getIntent().getExtras().get("GroupeCreatorID").toString();
 
 
+
+        ContacsRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(currentUserID);
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         GroupesUsersRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(currentUserID).child("OwnGrpName")
                 .child(CurrentgroupeName);
-
-        CurrentGroupeContacsRef = FirebaseDatabase.getInstance().getReference()
-                .child("GroupesMainActivity").child("Groupes")
-                .child(GroupeCreatorID).child(CurrentgroupeName)
-        .child("ContactsOfTheGroupe");
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-
-
-
-
 
         return ContactsView;
     }
@@ -94,7 +84,7 @@ public class GroupesContacsFragmnt extends Fragment
 
         FirebaseRecyclerOptions options =
                 new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(CurrentGroupeContacsRef, Contacts.class)
+                        .setQuery(ContacsRef, Contacts.class)
                         .build();
 
 
@@ -195,7 +185,34 @@ public class GroupesContacsFragmnt extends Fragment
 
 
 
+    private void GettingCreatorUserName() {
 
+
+        GroupesUsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild("name")) {
+
+                 String   GroupeCreatorUserName = dataSnapshot.child("name")
+                            .getValue().toString();
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+    }
 
 
 

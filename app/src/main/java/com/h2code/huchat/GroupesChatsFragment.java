@@ -28,7 +28,7 @@ public class GroupesChatsFragment extends Fragment
 
     private String CurrentgroupeName , currentUserID , CurrentUserName , CurrentGroupeCreatorId ;
 
-    private Button GoToChat ;
+    private Button GoToChat , GoToGroupeContacts ;
     private View PrivateChatsView;
 
     private DatabaseReference UsersRef;
@@ -60,6 +60,11 @@ public class GroupesChatsFragment extends Fragment
 
         GoToChat = PrivateChatsView.findViewById(R.id.GoToChat);
 
+        GoToGroupeContacts = PrivateChatsView.findViewById(R.id.GoToGroupeContacts);
+
+
+
+
                 CurrentgroupeName  = getActivity().getIntent().getExtras().get("groupName").toString();
 
       //  CurrentGroupeCreatorId = getArguments().getString("GroupeCreatorId");
@@ -68,6 +73,39 @@ public class GroupesChatsFragment extends Fragment
 
 
         System.out.println("henna henna");
+
+
+
+
+        GoToGroupeContacts   .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+
+
+                Intent CurrentGroupeSContactsSActivity = new Intent(getContext(), CurrentGroupeSContactsSActivity.class);
+
+                CurrentGroupeSContactsSActivity.putExtra("CurrentgroupeName", CurrentgroupeName);
+
+                CurrentGroupeSContactsSActivity.putExtra("CurrentUserName", CurrentUserName);
+
+
+                CurrentGroupeSContactsSActivity.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+
+
+
+                startActivity(CurrentGroupeSContactsSActivity);
+
+            }});
+
+
+
+
+
+
+
         GoToChat    .setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

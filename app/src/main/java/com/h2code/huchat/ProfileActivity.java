@@ -47,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity
   ContactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
   NotificationRef = FirebaseDatabase.getInstance().getReference().child("Notifications");
 
+        //new retrieve in on create
 
   receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
   senderUserID = mAuth.getCurrentUser().getUid();
@@ -59,6 +60,8 @@ public class ProfileActivity extends AppCompatActivity
         DeclineMessageRequestButton = (Button) findViewById(R.id.decline_message_request_button);
         Current_State = "new";
 
+
+        //new retrieve in on create 8454 5484
 
         RetrieveUserInfo();
     }

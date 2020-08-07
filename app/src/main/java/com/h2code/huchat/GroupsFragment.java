@@ -135,18 +135,18 @@ public class GroupsFragment extends Fragment
 
         UserGroupesRef.child(currentGroupName)
                 .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.hasChild("GroupeCreator")) {
+        if (dataSnapshot.hasChild("GroupeCreator")) {
 
-                            GroupeCreatorUserID = dataSnapshot.child("GroupeCreator")
-                                    .getValue().toString();
+            GroupeCreatorUserID = dataSnapshot.child("GroupeCreator")
+                    .getValue().toString();
+
+                      System.out.println(GroupeCreatorUserID);
 
 
-
-
-                        }
+        }
 
 
 

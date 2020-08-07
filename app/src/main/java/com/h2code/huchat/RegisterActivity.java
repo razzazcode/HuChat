@@ -24,7 +24,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 //import com.google.firebase.iid.FirebaseInstanceId;
 
-public class RegisterActivity extends AppCompatActivity
+public class
+
+
+
+
+
+
+
+RegisterActivity extends AppCompatActivity
 {
     private Button CreateAccountButton;
     private EditText UserEmail, UserPassword;

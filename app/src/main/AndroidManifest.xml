@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GroupesAdvancedChatActivity"></activity>
+        <activity android:name=".CurrentGroupeSContactsSActivity"></activity>
+        <activity android:name=".GroupesAdvancedChatActivity" />
         <activity android:name=".GroupeSChatSActivity" />
         <activity android:name=".GroupeFindFriendsActivity" />
         <activity android:name=".GroupesProfileActivity" />
