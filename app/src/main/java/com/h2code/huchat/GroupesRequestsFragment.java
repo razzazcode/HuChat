@@ -219,8 +219,8 @@ final String  GroupeCreatorUserName = dataSnapshot.child("GroupeCreatorUserName"
 
     GroupesContactsOfAgroupetRef.child(requestGroupeCreator).child(list_GroupeNmae)
 
-            .child("ContactsOfTheGroupe").child(currentUserID)
-           .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+            .child("ContactsOfTheGroupe").child(currentUserID).child("contact")
+           .setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
        @Override
        public void onComplete(@NonNull Task<Void> task)
                 {

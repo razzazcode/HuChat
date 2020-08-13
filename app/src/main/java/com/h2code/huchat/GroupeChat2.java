@@ -40,8 +40,8 @@ public class GroupeChat2 extends AppCompatActivity
     private GroupesTabAccessorAdapter myTabsAccessorAdapter;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference GroupeRootRef , RootRef , UserGroupesRef;
-    private String currentUserID , CurrentgroupeName ;
+    private DatabaseReference GroupeRootRef , RootRef , UserGroupesRef , UsersRef;
+    private String currentUserID , CurrentgroupeName , CurrentUserName ;
 public String CurrentGroupeCreatorId ;
 
     @Override
@@ -71,7 +71,7 @@ FirebaseApp.initializeApp(MainActivity.this);
         CurrentgroupeName = getIntent().getExtras().get("groupName").toString();
 
 
-
+        GetUserInfo();
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -142,6 +142,44 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
     }
+
+
+
+
+
+    private void GetUserInfo() {
+        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    CurrentUserName = dataSnapshot.child("name").getValue().toString();
+
+                    CurrentGroupeCreatorId = dataSnapshot.child("OwnGrpName").child(CurrentgroupeName).child("GroupeCreator").getValue().toString();
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
@@ -236,6 +274,20 @@ FirebaseApp.initializeApp(MainActivity.this);
     private void SendUserToSettingsActivity()
     {
         Intent settingsIntent = new Intent(GroupeChat2.this, GroupesSettingsActivity.class);
+
+
+
+
+        settingsIntent.putExtra("CurrentgroupeName", CurrentgroupeName);
+
+        settingsIntent.putExtra("CurrentUserName", CurrentUserName);
+
+
+        settingsIntent.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+
+
+
+
         startActivity(settingsIntent);
     }
 

@@ -40,12 +40,13 @@ public class GroupesSettingsActivity extends AppCompatActivity
     private EditText userName, userStatus;
     private CircleImageView userProfileImage;
 
-    private String currentUserID , profilepicLink , gropeName;
+    private String currentUserID , profilepicLink , gropeName ,CurrentgroupeName ,
+            CurrentGroupeCreatorId ,CurrentUserName ;
     private FirebaseAuth mAuth;
     private DatabaseReference RootRef;
 
     private static final int GalleryPick = 2;
-    private StorageReference UserProfileImagesRef;
+    private StorageReference GroupeProfileImagesRef;
     private ProgressDialog loadingBar;
 
     private Toolbar SettingsToolBar;
@@ -58,12 +59,32 @@ public class GroupesSettingsActivity extends AppCompatActivity
         setContentView(R.layout.activity_groupes_settings);
 
 
+
+        CurrentgroupeName = getIntent().getExtras().get("CurrentgroupeName").toString();
+
+
+        CurrentGroupeCreatorId = getIntent().getExtras().get("CurrentGroupeCreatorId").toString();
+
+
+        CurrentUserName = getIntent().getExtras().get("CurrentUserName").toString();
+
+
+
+
+
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        RootRef = FirebaseDatabase.getInstance().getReference().child("Groupes2");
-        UserProfileImagesRef = FirebaseStorage
-                .getInstance().getReference() .child("Groupes2")
-                .child("Profile Images");
+        RootRef = FirebaseDatabase.getInstance().getReference() .child("GroupesMainActivity")
+                .child("Groupes") . child(CurrentGroupeCreatorId)
+                .child(CurrentgroupeName)
+        ;
+
+
+        GroupeProfileImagesRef = FirebaseStorage
+                .getInstance().getReference() .child("GroupesMainActivity")
+                .child("Groupes") . child(CurrentGroupeCreatorId)
+                .child(CurrentgroupeName).child("CurrentGroupeImage")
+                ;
 
         gropeName="";
 
@@ -147,7 +168,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
 
 
 
-                final  StorageReference filePath = UserProfileImagesRef.child(currentUserID + ".jpg");
+                final  StorageReference filePath = GroupeProfileImagesRef.child(currentUserID + ".jpg");
 
                 filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -171,7 +192,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
            //    final String downloadLinkofuploadedfile = filePath.getDownloadUrl().toString();
            //  task.getResult().getMetadata().getReference().getDownloadUrl().toString();
 
-           RootRef.child("UsersGroupes").child(currentUserID).child(gropeName).child("image")
+           RootRef.child("CurrentGroupesettings").child("image")
                                     .setValue(profilepicLink)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -225,7 +246,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
             profileMap.put("uid", currentUserID + gropeName);
             profileMap.put("name", setUserName);
             profileMap.put("status", setStatus);
-            RootRef.child("UsersGroupes").child(currentUserID).child(gropeName).updateChildren(profileMap)
+            RootRef.child("CurrentGroupesettings").updateChildren(profileMap)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task)
@@ -251,7 +272,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
 
     private void RetrieveUserInfo()
     {
-        RootRef.child("UsersGroupes").child(currentUserID).child(gropeName)
+        RootRef.child("CurrentGroupesettings")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)

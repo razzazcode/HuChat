@@ -71,7 +71,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 
-        myContactsList = findViewById(R.id.currentGroupecontacts_list);
+        myContactsList = (RecyclerView) findViewById(R.id.currentGroupecontacts_list);
         myContactsList.setLayoutManager(new LinearLayoutManager(this));
 
 
@@ -95,10 +95,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
+        ContacsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Contacts").child(currentUserID);
 
 
-
-        mToolbar = (Toolbar) findViewById(R.id.find_friends_toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.currentGroupeContacts_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -122,7 +123,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
                .build();
 
 
-         FirebaseRecyclerAdapter<Contacts, CurrentGroupesContacsViewHolder> adapter
+        final     FirebaseRecyclerAdapter<Contacts, CurrentGroupesContacsViewHolder> adapter
                 = new FirebaseRecyclerAdapter<Contacts, CurrentGroupesContacsViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final CurrentGroupesContacsViewHolder holder, int position, @NonNull Contacts model)
@@ -164,7 +165,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
           holder.userName.setText(profileName);
           holder.userStatus.setText(profileStatus);
-                                Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
+       Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
       }
       else
       {

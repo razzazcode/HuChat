@@ -10,7 +10,7 @@ tools:context=".CurrentGroupeSContactsSActivity">
 
     <include
         layout="@layout/app_bar_layout"
-        android:id="@+id/find_friends_toolbar"
+        android:id="@+id/currentGroupeContacts_toolbar"
         >
     </include>
 
@@ -21,7 +21,7 @@ tools:context=".CurrentGroupeSContactsSActivity">
     android:id="@+id/currentGroupecontacts_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/find_friends_toolbar"
+    android:layout_below="@+id/currentGroupeContacts_toolbar"
     android:layout_alignParentStart="true"
     android:layout_centerVertical="true" />
 </RelativeLayout>

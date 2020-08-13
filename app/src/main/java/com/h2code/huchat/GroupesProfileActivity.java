@@ -307,7 +307,7 @@ InfoOfCreator();
     private void AcceptChatRequest()
     {
         GroupesContactsOfAgroupetRef.child(receiverUserID)
-                .setValue("Saved")
+                .setValue("")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)

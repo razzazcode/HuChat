@@ -59,7 +59,8 @@ public class ContactsFragment extends Fragment
         currentUserID = mAuth.getCurrentUser().getUid();
 
 
-        ContacsRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(currentUserID);
+        ContacsRef = FirebaseDatabase.getInstance().getReference()
+                .child("Contacts").child(currentUserID);
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
