@@ -28,9 +28,9 @@ public class LoginActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private ProgressDialog loadingBar;
 
-    private Button LoginButton, PhoneLoginButton;
+    private Button LoginButton;
     private EditText UserEmail, UserPassword;
-    private TextView NeedNewAccountLink, ForgetPasswordLink;
+    private TextView NeedNewAccountLink, ForgetPasswordLink, PhoneLoginButton;
 
     private DatabaseReference UsersRef;
 
@@ -39,7 +39,12 @@ public class LoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+      //  setContentView(R.layout.activity_login);
+
+        setContentView(R.layout.tryxmlfile);
+
+
+
 
         mAuth = FirebaseAuth.getInstance();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -172,7 +177,7 @@ public class LoginActivity extends AppCompatActivity
     private void InitializeFields()
     {
         LoginButton = (Button) findViewById(R.id.login_button);
-        PhoneLoginButton = (Button) findViewById(R.id.phone_login_button);
+        PhoneLoginButton =  findViewById(R.id.phone_login_button);
         UserEmail = (EditText) findViewById(R.id.login_email);
         UserPassword = (EditText) findViewById(R.id.login_password);
         NeedNewAccountLink = (TextView) findViewById(R.id.need_new_account_link);
