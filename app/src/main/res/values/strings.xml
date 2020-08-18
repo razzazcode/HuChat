@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HuChat</string>
+    <string name="phoneexample">Write phone number like : +201223456789</string>
 </resources>

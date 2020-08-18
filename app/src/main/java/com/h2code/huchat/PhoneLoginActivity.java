@@ -43,7 +43,8 @@ public class PhoneLoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_login);
+      //  setContentView(R.layout.activity_phone_login);
+          setContentView(R.layout.activity_phone_login);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -133,7 +134,9 @@ public class PhoneLoginActivity extends AppCompatActivity
             public void onVerificationFailed(FirebaseException e)
             {
                 loadingBar.dismiss();
-                Toast.makeText(PhoneLoginActivity.this, "Invalid Phone Number, Please enter correct phone number with your country code...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PhoneLoginActivity.this,
+    "Invalid Phone Number, Please enter correct phone number with your country code...",
+                        Toast.LENGTH_SHORT).show();
 
                 SendVerificationCodeButton.setVisibility(View.VISIBLE);
                 InputPhoneNumber.setVisibility(View.VISIBLE);

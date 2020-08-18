@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".PhoneLoginActivity">
 
         <!-- Login progress -->
         <ProgressBar
@@ -99,15 +99,15 @@
    android:layout_height="60dp">
 
    <EditText
-       android:id="@+id/login_email"
+       android:id="@+id/phone_nnumber_input"
     android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:ems="10"
-     android:hint="please enter your email here ..."
+     android:hint="@string/phoneexample"
      android:layout_marginLeft="10dp"
      android:layout_marginRight="10dp"
      android:textSize="16dp"
-     android:inputType="textEmailAddress"
+     android:inputType="phone"
   android:background="@android:color/transparent" />
    </LinearLayout>
 
@@ -122,14 +122,18 @@
     android:layout_width="fill_parent"
     android:layout_height="60dp">
     <EditText
-        android:id="@+id/login_password"
+        android:id="@+id/verification_code_input"
    android:layout_width="match_parent"
    android:layout_height="match_parent"
    android:ems="10"
-   android:hint="Password"
+   android:hint="Verification code here please"
    android:layout_marginLeft="10dp"
    android:layout_marginRight="10dp"
    android:textSize="16dp"
+
+          android:visibility="invisible"
+
+
    android:inputType="textEmailAddress"
    android:background="@android:color/transparent" />
 
@@ -147,12 +151,12 @@
 
 
                 <Button
-      android:id="@+id/login_button"
+      android:id="@+id/send_ver_code_button"
       style="?android:textAppearanceSmall"
  android:layout_width="match_parent"
  android:layout_height="60dp"
  android:layout_marginTop="16dp"
- android:text="Sign in"
+ android:text="Send Verification Code "
  android:textStyle="bold"
  android:background="@drawable/blue_btn_bkg"
  android:textColor="#fff"
@@ -160,60 +164,30 @@
  android:layout_marginRight="20dp"
  />
 
-       <LinearLayout
-           android:orientation="vertical"
-
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="40dp"
-      android:layout_gravity="center">
-
-  <TextView
 
 
-      android:id="@+id/forget_password_link"
-
-
-
-      android:padding="10dp"
-
-
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Forgot your login details ?"
-      android:textColor="#80ffffff"
-      android:textSize="12dp" />
-  <TextView
-
-      android:padding="10dp"
-
-      android:id="@+id/need_new_account_link"
-
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Need New Account ?"
-      android:textColor="#ffffff"
-      android:paddingLeft="5dp"
-      android:textSize="12dp" />
+     <Button
+     android:id="@+id/verify_button"
+   style="?android:textAppearanceSmall"
+   android:layout_width="match_parent"
+   android:layout_height="60dp"
+   android:layout_marginTop="16dp"
+   android:text="Sign in"
+   android:textStyle="bold"
+   android:background="@drawable/blue_btn_bkg"
+   android:textColor="#fff"
+   android:layout_marginLeft="20dp"
+   android:layout_marginRight="20dp"
 
 
 
-     <TextView
+  android:visibility="invisible"
+
+   />
 
 
-         android:padding="10dp"
-
-         android:id="@+id/phone_login_button"
 
 
-         android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Login Using Phone number"
-      android:textColor="#80ffffff"
-      android:textSize="12dp" />
-
-
-                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
