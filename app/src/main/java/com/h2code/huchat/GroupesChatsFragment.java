@@ -87,12 +87,15 @@ public class GroupesChatsFragment extends Fragment
 
                 Intent CurrentGroupeSContactsSActivity = new Intent(getContext(), CurrentGroupeSContactsSActivity.class);
 
-                CurrentGroupeSContactsSActivity.putExtra("CurrentgroupeName", CurrentgroupeName);
+                CurrentGroupeSContactsSActivity
+                        .putExtra("CurrentgroupeName", CurrentgroupeName);
 
-                CurrentGroupeSContactsSActivity.putExtra("CurrentUserName", CurrentUserName);
+                CurrentGroupeSContactsSActivity
+                        .putExtra("CurrentUserName", CurrentUserName);
 
 
-                CurrentGroupeSContactsSActivity.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+                CurrentGroupeSContactsSActivity
+                        .putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
 
 
 

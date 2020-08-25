@@ -70,13 +70,16 @@ FirebaseApp.initializeApp(MainActivity.this);
 
         CurrentgroupeName = getIntent().getExtras().get("groupName").toString();
 
+        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        GetUserInfo();
 
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         RootRef = FirebaseDatabase.getInstance().getReference();
+
+
+        GetUserInfo();
 
         GroupeRootRef = FirebaseDatabase.getInstance().getReference()
                 .child("GroupesMainActivity").child("Groupes") ;

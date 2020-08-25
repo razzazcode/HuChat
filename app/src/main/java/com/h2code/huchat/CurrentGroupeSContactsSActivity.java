@@ -40,7 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 
-    public class CurrentGroupeSContactsSActivity extends AppCompatActivity {
+public class CurrentGroupeSContactsSActivity extends AppCompatActivity {
 
 
 
@@ -63,47 +63,47 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_current_groupe_s_contacts_s);
+ super.onCreate(savedInstanceState);
+ setContentView(R.layout.activity_current_groupe_s_contacts_s);
 
 
 
 
 
 
-        myContactsList = (RecyclerView) findViewById(R.id.currentGroupecontacts_list);
-        myContactsList.setLayoutManager(new LinearLayoutManager(this));
+ myContactsList = (RecyclerView) findViewById(R.id.currentGroupecontacts_list);
+ myContactsList.setLayoutManager(new LinearLayoutManager(this));
 
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
+ mAuth = FirebaseAuth.getInstance();
+ currentUserID = mAuth.getCurrentUser().getUid();
 
 
-        CurrentgroupeName = getIntent().getExtras().get("CurrentgroupeName").toString();
-        GroupeCreatorID = getIntent().getExtras().get("CurrentGroupeCreatorId").toString();
+ CurrentgroupeName = getIntent().getExtras().get("CurrentgroupeName").toString();
+ GroupeCreatorID = getIntent().getExtras().get("CurrentGroupeCreatorId").toString();
 
 
 
-        GroupesUsersRef = FirebaseDatabase.getInstance().getReference()
-                .child("Users").child(currentUserID).child("OwnGrpName")
-                .child(CurrentgroupeName);
+ GroupesUsersRef = FirebaseDatabase.getInstance().getReference()
+         .child("Users").child(currentUserID).child("OwnGrpName")
+         .child(CurrentgroupeName);
 
-        CurrentGroupeContacsRef = FirebaseDatabase.getInstance().getReference()
-                .child("GroupesMainActivity").child("Groupes")
-                .child(GroupeCreatorID).child(CurrentgroupeName)
-                .child("ContactsOfTheGroupe");
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-        ContacsRef = FirebaseDatabase.getInstance().getReference()
-                .child("Contacts").child(currentUserID);
+ CurrentGroupeContacsRef = FirebaseDatabase.getInstance().getReference()
+         .child("GroupesMainActivity").child("Groupes")
+         .child(GroupeCreatorID).child(CurrentgroupeName)
+         .child("ContactsOfTheGroupe");
+ UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
-        mToolbar = (Toolbar) findViewById(R.id.currentGroupeContacts_toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Groupe Contacts");
+ ContacsRef = FirebaseDatabase.getInstance().getReference()
+         .child("Contacts").child(currentUserID);
+
+
+ mToolbar = (Toolbar) findViewById(R.id.currentGroupeContacts_toolbar);
+ setSupportActionBar(mToolbar);
+ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+ getSupportActionBar().setDisplayShowHomeEnabled(true);
+ getSupportActionBar().setTitle("Groupe Contacts");
 
 
 
@@ -115,103 +115,106 @@ import de.hdodenhof.circleimageview.CircleImageView;
     @Override
     public void onStart()
     {
-        super.onStart();
+   super.onStart();
 
-        FirebaseRecyclerOptions options =
-                new FirebaseRecyclerOptions.Builder<Contacts>()
-               .setQuery(CurrentGroupeContacsRef, Contacts.class)
-               .build();
+   FirebaseRecyclerOptions options =
+new FirebaseRecyclerOptions.Builder<Contacts>()
+  .setQuery(CurrentGroupeContacsRef, Contacts.class)
+  .build();
 
 
-        final     FirebaseRecyclerAdapter<Contacts, CurrentGroupesContacsViewHolder> adapter
-                = new FirebaseRecyclerAdapter<Contacts, CurrentGroupesContacsViewHolder>(options) {
-            @Override
+
+
+  final     FirebaseRecyclerAdapter<Contacts, CurrentGroupesContacsViewHolder> adapter
+  = new FirebaseRecyclerAdapter
+  <Contacts, CurrentGroupesContacsViewHolder>(options) {
+    @Override
             protected void onBindViewHolder(@NonNull final CurrentGroupesContacsViewHolder holder, int position, @NonNull Contacts model)
+   {
+       final String userIDs = getRef(position).getKey();
+
+       UsersRef.child(userIDs).addValueEventListener(new ValueEventListener() {
+   @Override
+   public void onDataChange(DataSnapshot dataSnapshot)
             {
-                final String userIDs = getRef(position).getKey();
+                if (dataSnapshot.exists())
+    {
+        if (dataSnapshot.child("userState").hasChild("state"))
+        {
+   String state = dataSnapshot.child("userState").child("state").getValue().toString();
+   String date = dataSnapshot.child("userState").child("date").getValue().toString();
+   String time = dataSnapshot.child("userState").child("time").getValue().toString();
 
-  UsersRef.child(userIDs).addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot)
-      {
-          if (dataSnapshot.exists())
-          {
-                            if (dataSnapshot.child("userState").hasChild("state"))
-  {
-      String state = dataSnapshot.child("userState").child("state").getValue().toString();
-      String date = dataSnapshot.child("userState").child("date").getValue().toString();
-      String time = dataSnapshot.child("userState").child("time").getValue().toString();
-
-      if (state.equals("online"))
-      {
-          holder.onlineIcon.setVisibility(View.VISIBLE);
-      }
-      else if (state.equals("offline"))
-      {
-          holder.onlineIcon.setVisibility(View.INVISIBLE);
-      }
-      }
-      else
-      {
-          holder.onlineIcon.setVisibility(View.INVISIBLE);
-      }
+   if (state.equals("online"))
+   {
+       holder.onlineIcon.setVisibility(View.VISIBLE);
+   }
+   else if (state.equals("offline"))
+   {
+       holder.onlineIcon.setVisibility(View.INVISIBLE);
+     }
+ }
+ else
+ {
+     holder.onlineIcon.setVisibility(View.INVISIBLE);
+ }
 
 
-      if (dataSnapshot.hasChild("image"))
-      {
-          String userImage = dataSnapshot.child("image").getValue().toString();
-          String profileName = dataSnapshot.child("name").getValue().toString();
-          String profileStatus = dataSnapshot.child("status").getValue().toString();
+ if (dataSnapshot.hasChild("image"))
+ {
+    String userImage = dataSnapshot.child("image").getValue().toString();
+    String profileName = dataSnapshot.child("name").getValue().toString();
+    String profileStatus = dataSnapshot.child("status").getValue().toString();
 
-          holder.userName.setText(profileName);
-          holder.userStatus.setText(profileStatus);
-       Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
-      }
-      else
-      {
+    holder.userName.setText(profileName);
+    holder.userStatus.setText(profileStatus);
+            Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
+        }
+        else
+        {
      String profileName = dataSnapshot.child("name").getValue().toString();
      String profileStatus = dataSnapshot.child("status").getValue().toString();
 
      holder.userName.setText(profileName);
-          holder.userStatus.setText(profileStatus);
-      }
+     holder.userStatus.setText(profileStatus);
+        }
 
 
-      holder.itemView.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View view)
-    {
-        Intent GroupchatReq = new Intent(CurrentGroupeSContactsSActivity.this, GroupesProfileActivity.class);
+ holder.itemView.setOnClickListener(new View.OnClickListener() {
+  @Override
+  public void onClick(View view)
+  {
+  Intent GroupchatReq = new Intent(CurrentGroupeSContactsSActivity.this, GroupesProfileActivity.class);
 
-        GroupchatReq.putExtra("GroupeCreatorId", currentUserID);
-        GroupchatReq.putExtra("GroupeName", CurrentgroupeName );
-        GroupchatReq.putExtra("visit_user_id", userIDs);
-
-
-              startActivity(GroupchatReq);
-          }
-                            });
+  GroupchatReq.putExtra("GroupeCreatorId", currentUserID);
+  GroupchatReq.putExtra("GroupeName", CurrentgroupeName );
+GroupchatReq.putExtra("visit_user_id", userIDs);
 
 
+           startActivity(GroupchatReq);
+       }
+   });
 
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
 
-                    }
+  }
+                  }
+
+       @Override
+       public void onCancelled(DatabaseError databaseError) {
+
+       }
                 });
-            }
+  }
 
-            @NonNull
-            @Override
-            public CurrentGroupesContacsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
-            {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
-                CurrentGroupesContacsViewHolder viewHolder = new CurrentGroupesContacsViewHolder(view);
-                return viewHolder;
-            }
+  @NonNull
+  @Override
+  public CurrentGroupesContacsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
+  {
+      View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
+      CurrentGroupesContacsViewHolder viewHolder = new CurrentGroupesContacsViewHolder(view);
+      return viewHolder;
+  }
         };
 
         myContactsList.setAdapter(adapter);
@@ -238,22 +241,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
         public CurrentGroupesContacsViewHolder(@NonNull View itemView)
         {
-            super(itemView);
+  super(itemView);
 
-            userName = itemView.findViewById(R.id.user_profile_name);
-            userStatus = itemView.findViewById(R.id.user_status);
-            profileImage = itemView.findViewById(R.id.users_profile_image);
-            onlineIcon = (ImageView) itemView.findViewById(R.id.user_online_status);
+  userName = itemView.findViewById(R.id.user_profile_name);
+  userStatus = itemView.findViewById(R.id.user_status);
+  profileImage = itemView.findViewById(R.id.users_profile_image);
+  onlineIcon = (ImageView) itemView.findViewById(R.id.user_online_status);
         }
     }
 }
-
-
-
-
-
-
-
 
 
 
