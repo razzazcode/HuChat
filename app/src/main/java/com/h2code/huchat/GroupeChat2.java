@@ -298,6 +298,14 @@ FirebaseApp.initializeApp(MainActivity.this);
     private void SendUserToGroupeFindFriendsActivity()
     {
         Intent findFriendsIntent = new Intent(GroupeChat2.this, GroupeFindFriendsActivity.class);
+
+        findFriendsIntent.putExtra("CurrentgroupeName", CurrentgroupeName);
+
+        findFriendsIntent.putExtra("CurrentUserName", CurrentUserName);
+
+
+        findFriendsIntent.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+
         startActivity(findFriendsIntent);
     }
 

@@ -54,11 +54,11 @@ public class GroupesProfileActivity extends AppCompatActivity
         GroupesNotificationRef = FirebaseDatabase.getInstance().getReference()
                 .child("GroupesMainActivity").child("Groupes Notifications");
 
-        GroupeCreatorId = getIntent().getExtras().get("GroupeCreatorId").toString();
+        GroupeCreatorId = getIntent().getExtras().get("CurrentGroupeCreatorId").toString();
 
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         senderUserID = mAuth.getCurrentUser().getUid();
-        GroupeName = getIntent().getExtras().get("GroupeName").toString();
+        GroupeName = getIntent().getExtras().get("CurrentgroupeName").toString();
 
 
         GroupesRequestsFragmentRef = FirebaseDatabase.getInstance().getReference()
@@ -97,17 +97,17 @@ InfoOfCreator();
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                if ((dataSnapshot.exists())  &&  (dataSnapshot.hasChild("image")))
-                {
-                    GroupeCreatorImagePath = dataSnapshot.child("image").getValue().toString();
-                    GroupeCreatorUserName = dataSnapshot.child("name").getValue().toString();
-                    String userstatus = dataSnapshot.child("status").getValue().toString();
+    if ((dataSnapshot.exists())  &&  (dataSnapshot.hasChild("image")))
+    {
+        GroupeCreatorImagePath = dataSnapshot.child("image").getValue().toString();
+        GroupeCreatorUserName = dataSnapshot.child("name").getValue().toString();
+        String userstatus = dataSnapshot.child("status").getValue().toString();
 
-                }
-                else
-                {
-                    GroupeCreatorUserName = dataSnapshot.child("name").getValue().toString();
-                    String userstatus = dataSnapshot.child("status").getValue().toString();
+    }
+    else
+    {
+        GroupeCreatorUserName = dataSnapshot.child("name").getValue().toString();
+        String userstatus = dataSnapshot.child("status").getValue().toString();
 
 
 
