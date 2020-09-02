@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PhineCtActivity">
+
+
+    <EditText
+        android:id="@+id/editText32"
+        android:layout_width="146dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="200dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="contact_number"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="148dp" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="146dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="368dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="contact_number"
+        android:inputType="textPersonName"
+       />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:onClick="getNameButton"
+        android:text="get_name" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="106dp"
+        android:layout_marginTop="64dp"
+        android:onClick="getNumberButton"
+        android:text="get_number" />
+</RelativeLayout>

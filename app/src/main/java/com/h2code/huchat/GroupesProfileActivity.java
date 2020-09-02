@@ -261,7 +261,10 @@ InfoOfCreator();
                     {
                         AcceptChatRequest();
                     }
-                    if (Current_State.equals("friends"))
+                    if (Current_State.equals("friends") &&
+
+                    senderUserID.equals(GroupeCreatorId)
+                    )
                     {
                         RemoveSpecificContact();
                     }

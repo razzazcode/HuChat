@@ -228,7 +228,14 @@ public class GroupsFragment extends Fragment
 
                 while (iterator.hasNext())
                 {
-                    set.add(((DataSnapshot)iterator.next()).getKey());
+
+    String ng = ((DataSnapshot)iterator.next()).getKey();
+
+                  if (ng .contains("neh"))  {
+                      set.add(ng);
+                  }
+
+                   // set.add(((DataSnapshot)iterator.next()).getKey());
                 }
 
                 list_of_groups.clear();

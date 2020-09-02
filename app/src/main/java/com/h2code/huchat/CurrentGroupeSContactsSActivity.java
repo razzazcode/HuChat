@@ -186,8 +186,8 @@ new FirebaseRecyclerOptions.Builder<Contacts>()
   {
   Intent GroupchatReq = new Intent(CurrentGroupeSContactsSActivity.this, GroupesProfileActivity.class);
 
-  GroupchatReq.putExtra("GroupeCreatorId", currentUserID);
-  GroupchatReq.putExtra("GroupeName", CurrentgroupeName );
+  GroupchatReq.putExtra("CurrentGroupeCreatorId", currentUserID);
+  GroupchatReq.putExtra("CurrentgroupeName", CurrentgroupeName );
 GroupchatReq.putExtra("visit_user_id", userIDs);
 
 

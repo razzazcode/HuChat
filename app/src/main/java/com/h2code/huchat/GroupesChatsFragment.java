@@ -28,7 +28,7 @@ public class GroupesChatsFragment extends Fragment
 
     private String CurrentgroupeName , currentUserID , CurrentUserName , CurrentGroupeCreatorId ;
 
-    private Button GoToChat , GoToGroupeContacts ;
+    private Button GoToChat , GoToGroupeContacts  , Button344;
     private View PrivateChatsView;
 
     private DatabaseReference UsersRef;
@@ -62,7 +62,7 @@ public class GroupesChatsFragment extends Fragment
 
         GoToGroupeContacts = PrivateChatsView.findViewById(R.id.GoToGroupeContacts);
 
-
+        Button344 = PrivateChatsView.findViewById(R.id.button344);
 
 
                 CurrentgroupeName  = getActivity().getIntent().getExtras().get("groupName").toString();
@@ -131,6 +131,43 @@ public class GroupesChatsFragment extends Fragment
                 startActivity(GroupeSChatSActivity);
 
             }});
+
+
+
+
+
+              Button344  .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+
+
+
+
+                        Intent GroupeSChatSActivity = new Intent(getContext(), PhineCtActivity.class);
+
+                        GroupeSChatSActivity.putExtra("CurrentgroupeName", CurrentgroupeName);
+
+                        GroupeSChatSActivity.putExtra("CurrentUserName", CurrentUserName);
+
+
+                        GroupeSChatSActivity.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+
+
+
+                        startActivity(GroupeSChatSActivity);
+
+                    }});
+
+
+
+
+
+
+
+
+
+
 
         return PrivateChatsView;
     }
