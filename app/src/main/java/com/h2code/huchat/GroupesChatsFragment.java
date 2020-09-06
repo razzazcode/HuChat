@@ -138,26 +138,26 @@ public class GroupesChatsFragment extends Fragment
 
               Button344  .setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
+ public void onClick(View view) {
 
 
 
 
 
-                        Intent GroupeSChatSActivity = new Intent(getContext(), PhineCtActivity.class);
+     Intent GroupeSChatSActivity = new Intent(getContext(), PhineCtActivity.class);
 
-                        GroupeSChatSActivity.putExtra("CurrentgroupeName", CurrentgroupeName);
+     GroupeSChatSActivity.putExtra("CurrentgroupeName", CurrentgroupeName);
 
-                        GroupeSChatSActivity.putExtra("CurrentUserName", CurrentUserName);
-
-
-                        GroupeSChatSActivity.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+     GroupeSChatSActivity.putExtra("CurrentUserName", CurrentUserName);
 
 
+     GroupeSChatSActivity.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
 
-                        startActivity(GroupeSChatSActivity);
 
-                    }});
+
+     startActivity(GroupeSChatSActivity);
+
+ }});
 
 
 

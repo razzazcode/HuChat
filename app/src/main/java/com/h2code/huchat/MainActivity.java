@@ -281,7 +281,7 @@ FirebaseApp.initializeApp(MainActivity.this);
 
     private void SendUserToFindFriendsActivity()
     {
-        Intent findFriendsIntent = new Intent(MainActivity.this, FindFriendsSearchActivity.class);
+        Intent findFriendsIntent = new Intent(MainActivity.this, SearchData.class);
         startActivity(findFriendsIntent);
     }
 

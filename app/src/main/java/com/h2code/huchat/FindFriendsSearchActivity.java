@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class FindFriendsSearchActivity extends AppCompatActivity {
@@ -35,7 +37,7 @@ public class FindFriendsSearchActivity extends AppCompatActivity {
     private SearchView searchView;
     private TextView textViewSearch;
 
-
+private EditText searchable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class FindFriendsSearchActivity extends AppCompatActivity {
        //  editTextPrice = findViewById(R.id.editTextPrice);
       //  editTextProduct = findViewById(R.id.editTextProduct);
 
-
+        searchable= findViewById(R.id.editTextTextPersonName);
 
         listView =findViewById(R.id.listView);
         searchView = findViewById(R.id.serachview);
@@ -76,9 +78,21 @@ public class FindFriendsSearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 int SearchIndex = refinedData.indexOf(query);
                 String SearchResult = refinedData.substring(SearchIndex);
-                String SearchSplit[] = SearchResult.split(",");
-                textViewSearch.setText(SearchSplit[0]);
-                 listView.setAdapter(new ArrayAdapter<String>(FindFriendsSearchActivity.this, android.R.layout.simple_list_item_1, SearchSplit));
+            //    String SearchSplit[] = SearchResult.split(",");
+                ArrayList<String> list=new ArrayList<String>();
+                String searchtxt = searchable.getText().toString();
+                String i = new String();
+                if ( SearchResult.contains(searchtxt) ) {
+
+                    list.add(SearchResult);
+                }
+                else {
+                    list.add("llll");
+
+                }
+                //textViewSearch.setText(SearchSplit[0]);
+                 listView.setAdapter(new ArrayAdapter<String>(FindFriendsSearchActivity.this,
+                         android.R.layout.simple_list_item_1, list ));
 
                 return false;
             }
