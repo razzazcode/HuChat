@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,6 +62,29 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
+
+        ForgetPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mAuth.sendPasswordResetEmail(UserEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(LoginActivity.this, "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(LoginActivity.this, "Error ! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+
+            }
+        });
 
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +162,11 @@ public class LoginActivity extends AppCompatActivity
           UsersRef.child(currentUserId).child("device_token")
                   .setValue(deviceToken);
 
+          String password2 = UserPassword.getText().toString();
 
+
+          UsersRef.child(currentUserId).child("userPassword")
+                  .setValue(password2);
 
     String emailtoken = UserEmail.getText().toString();
 

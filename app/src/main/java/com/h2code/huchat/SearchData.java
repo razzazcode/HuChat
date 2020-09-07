@@ -167,7 +167,7 @@ loadData("");
 
         Query databasesearchReference =  UsersRef.orderByChild("name")
                 .startAt(s)
-               .endAt("s+\uf8ff");
+               .endAt(s+"\uf8ff");
 
 
         // queryText = databasesearchReferenceT.getText().toString();
@@ -191,6 +191,21 @@ loadData("");
             holder.userName.setText(model.getName());
             holder.userStatus.setText(model.getStatus());
             Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
+
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view)
+                {
+                    String visit_user_id = getRef(position).getKey();
+
+                    Intent profileIntent = new Intent(SearchData.this, ProfileActivity.class);
+                    profileIntent.putExtra("visit_user_id", visit_user_id);
+                    startActivity(profileIntent);
+                }
+            });
+
+
 
 
        } else {

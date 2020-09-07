@@ -1,6 +1,7 @@
 package com.h2code.huchat;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,60 +85,103 @@ public class ContactsFragment extends Fragment
             @Override
             protected void onBindViewHolder(@NonNull final ContactsViewHolder holder, int position, @NonNull Contacts model)
             {
-                final String userIDs = getRef(position).getKey();
+ final String userIDs = getRef(position).getKey();
 
-                UsersRef.child(userIDs).addValueEventListener(new ValueEventListener() {
+ UsersRef.child(userIDs).addValueEventListener(new ValueEventListener() {
           @Override
-          public void onDataChange(DataSnapshot dataSnapshot)
-          {
-              if (dataSnapshot.exists())
+     public void onDataChange(DataSnapshot dataSnapshot)
      {
+         if (dataSnapshot.exists())
+     {
+
+
+         final String retName = dataSnapshot.child("name").getValue().toString();
+         final String retStatus = dataSnapshot.child("status").getValue().toString();
+         final String    retImage = dataSnapshot.child("image").getValue().toString();
+
+
+
+
          if (dataSnapshot.child("userState").hasChild("state"))
          {
-             String state = dataSnapshot.child("userState").child("state").getValue().toString();
-      String date = dataSnapshot.child("userState").child("date").getValue().toString();
-                String time = dataSnapshot.child("userState").child("time").getValue().toString();
+ String state = dataSnapshot.child("userState")
+         .child("state").getValue().toString();
 
-        if (state.equals("online"))
-        {
-            holder.onlineIcon.setVisibility(View.VISIBLE);
-        }
-        else if (state.equals("offline"))
-        {
-            holder.onlineIcon.setVisibility(View.INVISIBLE);
-        }
+      String date = dataSnapshot.child("userState")
+              .child("date").getValue().toString();
+
+  String time = dataSnapshot.child("userState")
+          .child("time").getValue().toString();
+
+
+if (state.equals("online"))
+{
+    holder.onlineIcon.setVisibility(View.VISIBLE);
+}
+else if (state.equals("offline"))
+{
+    holder.onlineIcon.setVisibility(View.INVISIBLE);
+
+    holder.userStatus.setText("Last Seen: " + date + " " + time);
+
+
+
+}
        }
        else
        {
+           holder.userStatus.setText("offline");
+
+
+
            holder.onlineIcon.setVisibility(View.INVISIBLE);
        }
 
 
-                            if (dataSnapshot.hasChild("image"))
-                            {
-                                String userImage = dataSnapshot.child("image").getValue().toString();
-                                String profileName = dataSnapshot.child("name").getValue().toString();
-                                String profileStatus = dataSnapshot.child("status").getValue().toString();
+   if (dataSnapshot.hasChild("image"))
+   {
+       String userImage = dataSnapshot.child("image").getValue().toString();
+       String profileName = dataSnapshot.child("name").getValue().toString();
+       String profileStatus = dataSnapshot.child("status").getValue().toString();
 
-                                holder.userName.setText(profileName);
-                                holder.userStatus.setText(profileStatus);
-                                Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
-                            }
-                            else
-                            {
-                                String profileName = dataSnapshot.child("name").getValue().toString();
-                                String profileStatus = dataSnapshot.child("status").getValue().toString();
+       holder.userName.setText(profileName);
+       holder.userStatus.setText(profileStatus);
+       Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(holder.profileImage);
+   }
+   else
+   {
+        String profileName = dataSnapshot.child("name").getValue().toString();
+       String profileStatus = dataSnapshot.child("status").getValue().toString();
 
-                                holder.userName.setText(profileName);
-                                holder.userStatus.setText(profileStatus);
-                            }
-                        }
-                    }
+       holder.userName.setText(profileName);
+       holder.userStatus.setText(profileStatus);
+   }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
 
-                    }
+         holder.itemView.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view)
+             {
+                 Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                 profileIntent.putExtra("visit_user_id", userIDs);
+                 profileIntent.putExtra("visit_user_name", retName);
+                 profileIntent.putExtra("visit_image", retImage);
+                 startActivity(profileIntent);
+             }
+         });
+
+
+
+
+
+
+       }
+   }
+
+   @Override
+   public void onCancelled(DatabaseError databaseError) {
+
+   }
                 });
             }
 

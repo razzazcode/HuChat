@@ -43,7 +43,6 @@ public class PhoneLoginActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-      //  setContentView(R.layout.activity_phone_login);
           setContentView(R.layout.activity_phone_login);
 
 

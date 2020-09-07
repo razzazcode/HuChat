@@ -222,14 +222,17 @@ String passwordOfUser = UserPassword.getText().toString();
      RootRef.child("Users").child(currentUserID).child("userPassword")
              .setValue(passwordOfUser);
 
-     SendUserToMainActivity();
-     Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+           Toast.makeText(RegisterActivity.this, "Account Created Successfully...", Toast.LENGTH_SHORT).show();
+
+
+
+           SendUserToMainActivity();
      loadingBar.dismiss();
                                     }
                                     else
                                     {
                                         String message = task.getException().toString();
-                                        Toast.makeText(RegisterActivity.this, "Error : " + message, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterActivity.this, "Error : Chech your Internet connection please then try again " , Toast.LENGTH_SHORT).show();
                                         loadingBar.dismiss();
                                     }
                                 }
