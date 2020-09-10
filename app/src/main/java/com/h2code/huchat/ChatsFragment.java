@@ -4,9 +4,13 @@ package com.h2code.huchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -49,6 +54,10 @@ public class ChatsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        setHasOptionsMenu(true); // Add this!
+
+
         PrivateChatsView = inflater.inflate(R.layout.fragment_chats, container, false);
 
 
@@ -62,8 +71,195 @@ public class ChatsFragment extends Fragment
         chatsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
+        loadData("");
+
+
+
+
+
+
         return PrivateChatsView;
     }
+
+
+
+
+
+
+
+
+
+
+
+    private void loadData(String s) {
+
+            Query databasesearchReference =  ChatsRef.orderByChild("Contacts")
+                       .startAt(s)
+                    .endAt(s+"\uf8ff");
+
+
+        FirebaseRecyclerOptions<Contacts> options =
+                new FirebaseRecyclerOptions.Builder<Contacts>()
+                        .setQuery(databasesearchReference, Contacts.class)
+                        .build();
+
+
+        FirebaseRecyclerAdapter<Contacts, ChatsViewHolder> adapter =
+                new FirebaseRecyclerAdapter<Contacts, ChatsViewHolder>(options) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull final ChatsViewHolder holder, int position, @NonNull Contacts model)
+                    {
+     final String usersIDs = getRef(position).getKey();
+     final String[] retImage = {"default_image"};
+
+     UsersRef.child(usersIDs).addValueEventListener(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot)
+         {
+             if (dataSnapshot.exists())
+             {
+    if (dataSnapshot.hasChild("image"))
+    {
+        retImage[0] = dataSnapshot.child("image").getValue().toString();
+        Picasso.get().load(retImage[0]).into(holder.profileImage);
+    }
+
+    final String retName = dataSnapshot.child("name").getValue().toString();
+    final String retStatus = dataSnapshot.child("status").getValue().toString();
+
+    holder.userName.setText(retName);
+
+
+    if (dataSnapshot.child("userState").hasChild("state"))
+    {
+        String state = dataSnapshot.child("userState").child("state").getValue().toString();
+        String date = dataSnapshot.child("userState").child("date").getValue().toString();
+        String time = dataSnapshot.child("userState").child("time").getValue().toString();
+
+       if (state.equals("online"))
+       {
+           holder.userStatus.setText(retStatus);
+
+           holder.onlineIcon.setVisibility(View.VISIBLE);
+
+
+       }
+       else if (state.equals("offline"))
+       {
+           holder.userStatus.setText("Last Seen: " + date + " " + time);
+
+
+           holder.onlineIcon.setVisibility(View.INVISIBLE);
+
+
+            }
+        }
+        else
+        {
+            holder.userStatus.setText("offline");
+
+            holder.onlineIcon.setVisibility(View.INVISIBLE);
+
+
+        }
+
+              holder.itemView.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view)
+   {
+       Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+       chatIntent.putExtra("visit_user_id", usersIDs);
+       chatIntent.putExtra("visit_user_name", retName);
+       chatIntent.putExtra("visit_image", retImage[0]);
+       startActivity(chatIntent);
+                  }
+              });
+          }
+      }
+
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
+
+      }
+                        });
+       }
+
+
+
+
+       @NonNull
+       @Override
+       public ChatsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
+       {
+           View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
+           return new ChatsViewHolder(view);
+       }
+                };
+
+        chatsList.setAdapter(adapter);
+        adapter.startListening();
+
+
+
+
+
+    }
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu , MenuInflater inflater) {
+
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+
+       inflater.inflate(R.menu.searchfrag ,  menu);
+        MenuItem menuItem = menu.findItem(R.id.SearchFragment);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+      //  menuItem.setActionView(searchView);
+
+
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+
+                loadData(s);
+
+
+                return false;
+            }
+        });
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
@@ -71,7 +267,7 @@ public class ChatsFragment extends Fragment
     {
         super.onStart();
 
-
+/*
         FirebaseRecyclerOptions<Contacts> options =
                 new FirebaseRecyclerOptions.Builder<Contacts>()
                 .setQuery(ChatsRef, Contacts.class)
@@ -121,6 +317,11 @@ UsersRef.child(usersIDs).addValueEventListener(new ValueEventListener() {
    else if (state.equals("offline"))
    {
        holder.userStatus.setText("Last Seen: " + date + " " + time);
+
+
+       holder.onlineIcon.setVisibility(View.INVISIBLE);
+
+
    }
                          }
                          else
@@ -163,7 +364,7 @@ UsersRef.child(usersIDs).addValueEventListener(new ValueEventListener() {
                 };
 
         chatsList.setAdapter(adapter);
-        adapter.startListening();
+        adapter.startListening();  */
     }
 
 

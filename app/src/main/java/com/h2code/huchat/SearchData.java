@@ -39,9 +39,7 @@ public class SearchData extends AppCompatActivity
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
-    private String queryText ;
 
-    private Button SearchBut;
 
 
     @Override
@@ -50,10 +48,7 @@ public class SearchData extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_data);
 
-        SearchBut = findViewById(R.id.SearchBut);
 
-
-        databasesearchReferenceT= findViewById(R.id.databasesearchReferenceT);
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
@@ -101,8 +96,7 @@ loadData("");
 
         FirebaseRecyclerOptions<Contacts> options =
                 new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(UsersRef, Contacts.class)
-                        .build();
+                        .setQuery(UsersRef, Contacts.clas .build();
 
         FirebaseRecyclerAdapter<Contacts, SearchDataViewHolder> adapter =
                 new FirebaseRecyclerAdapter<Contacts, SearchDataViewHolder>(options) {
@@ -183,7 +177,7 @@ loadData("");
     @Override
     protected void onBindViewHolder
  (@NonNull SearchDataViewHolder holder,
-  final int position, @NonNull Contacts model) {
+  final int position, @NonNull final Contacts model) {
 
 
         if (!currentUser.getUid().equals(getRef(position).getKey().toString())) {
@@ -201,6 +195,7 @@ loadData("");
 
                     Intent profileIntent = new Intent(SearchData.this, ProfileActivity.class);
                     profileIntent.putExtra("visit_user_id", visit_user_id);
+                    profileIntent.putExtra("visit_user_name", model.getName());
                     startActivity(profileIntent);
                 }
             });

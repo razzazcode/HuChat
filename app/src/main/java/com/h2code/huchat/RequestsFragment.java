@@ -222,19 +222,19 @@ holder.CancelButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
-                        if (task.isSuccessful())
-                        {
-                            ChatRequestsRef.child(list_user_id).child(currentUserID)
-                                    .removeValue()
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            if (task.isSuccessful())
-                                            {
-                                                Toast.makeText(getContext(), "Contact Deleted", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
+          if (task.isSuccessful())
+          {
+              ChatRequestsRef.child(list_user_id).child(currentUserID)
+             .removeValue()
+             .addOnCompleteListener(new OnCompleteListener<Void>() {
+                 @Override
+                 public void onComplete(@NonNull Task<Void> task)
+                 {
+                     if (task.isSuccessful())
+                     {
+                         Toast.makeText(getContext(), "Contact Deleted", Toast.LENGTH_SHORT).show();
+                     }
+                 }
                                     });
                         }
                     }
@@ -328,13 +328,13 @@ holder.CancelButton.setOnClickListener(new View.OnClickListener() {
         if (task.isSuccessful())
         {
             Toast.makeText(getContext(), "Contact Deleted", Toast.LENGTH_SHORT).show();
-                          }
-                      }
-                  });
-                               }
-                                                            }
-                                });
-                    }
+                }
+            }
+        });
+                     }
+                                                  }
+                      });
+          }
                 }
                                 });
                    builder.show();
@@ -351,37 +351,37 @@ holder.CancelButton.setOnClickListener(new View.OnClickListener() {
             }
             else if (type.equals("sent"))
             {
-                Button request_sent_btn = holder.itemView.findViewById(R.id.request_accept_btn);
-                request_sent_btn.setText("Cancel sent request");
+     Button request_sent_btn = holder.itemView.findViewById(R.id.request_accept_btn);
+     request_sent_btn.setText("Cancel sent request");
 
 
 
 
-                request_sent_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ChatRequestsRef.child(currentUserID).child(list_user_id)
-                                .removeValue()
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task)
-                                    {
-                                        if (task.isSuccessful())
-                                        {
-                                            ChatRequestsRef.child(list_user_id).child(currentUserID)
-                                                    .removeValue()
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task)
-                                                        {
-                                                            if (task.isSuccessful())
-                                                            {
-                                                                Toast.makeText(getContext(), "you have cancelled the chat request.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    }
+     request_sent_btn.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+             ChatRequestsRef.child(currentUserID).child(list_user_id)
+  .removeValue()
+  .addOnCompleteListener(new OnCompleteListener<Void>() {
+      @Override
+      public void onComplete(@NonNull Task<Void> task)
+      {
+          if (task.isSuccessful())
+          {
+              ChatRequestsRef.child(list_user_id).child(currentUserID)
+                      .removeValue()
+     .addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task)
+         {
+             if (task.isSuccessful())
+             {
+                 Toast.makeText(getContext(), "you have cancelled the chat request.", Toast.LENGTH_SHORT).show();
+             }
+                          }
+                      });
+          }
+      }
                                 });
                     }
                 });

@@ -1,5 +1,6 @@
 package com.h2code.huchat;
 
+import android.app.ActivityManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -118,7 +120,7 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onStop();
 
-        if (currentUser != null)
+        if (currentUser == null)
         {
             updateUserStatus("offline");
         }
@@ -135,6 +137,11 @@ FirebaseApp.initializeApp(MainActivity.this);
         {
             updateUserStatus("offline");
         }
+
+
+
+
+
     }
 
 

@@ -22,25 +22,6 @@
         android:layout_marginStart="68dp"
         android:layout_marginTop="134dp" />
 
-    <EditText
-        android:id="@+id/databasesearchReferenceT"
-        android:layout_width="129dp"
-        android:layout_height="79dp"
-        android:layout_below="@+id/find_friends_toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:inputType="textPersonName"
-        android:text="Name" />
 
-    <Button
-        android:id="@+id/SearchBut"
-        android:layout_width="121dp"
-        android:layout_height="69dp"
-        android:layout_below="@+id/find_friends_toolbar"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="214dp"
-        android:layout_marginTop="31dp"
-        android:text="SearchBut" />
 
 </RelativeLayout>

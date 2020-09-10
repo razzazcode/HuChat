@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity
 {
-    private String receiverUserID, senderUserID, Current_State;
+    private String receiverUserID, senderUserID, Current_State , recieverName , senderName;
 
     private CircleImageView userProfileImage;
     private TextView userProfileName, userProfileStatus;
@@ -49,8 +49,37 @@ public class ProfileActivity extends AppCompatActivity
 
         //new retrieve in on create
 
+
+
+
   receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
   senderUserID = mAuth.getCurrentUser().getUid();
+
+
+
+ UserRef.child(senderUserID).addValueEventListener(new ValueEventListener() {
+  @Override
+  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+      if (dataSnapshot.exists()){
+          if (dataSnapshot.hasChild("name")){
+              senderName = dataSnapshot.child("name").getValue().toString();
+          }
+      }
+
+
+  }
+
+  @Override
+  public void onCancelled(@NonNull DatabaseError error) {
+
+         }
+     });
+
+
+                recieverName = getIntent().getExtras().get("visit_user_name").toString();
+        //  senderName
+
 
 
   userProfileImage = (CircleImageView) findViewById(R.id.visit_profile_image);
@@ -81,7 +110,7 @@ public class ProfileActivity extends AppCompatActivity
         String userstatus = dataSnapshot.child("status").getValue().toString();
 
         Picasso.get().load(userImage).placeholder(R.drawable.profile_image).into(userProfileImage);
-        userProfileName.setText(userName);
+        userProfileName.setText(recieverName);
         userProfileStatus.setText(userstatus);
 
 
@@ -246,15 +275,24 @@ public class ProfileActivity extends AppCompatActivity
     private void AcceptChatRequest()
     {
         ContactsRef.child(senderUserID).child(receiverUserID)
-                .child("Contacts").setValue("Saved")
+                .child("Contacts").setValue(recieverName)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)
                     {
                         if (task.isSuccessful())
                         {
+
+
+
+
+
+
+
+
+
                             ContactsRef.child(receiverUserID).child(senderUserID)
-          .child("Contacts").setValue("Saved")
+          .child("Contacts").setValue(senderName)
           .addOnCompleteListener(new OnCompleteListener<Void>() {
               @Override
               public void onComplete(@NonNull Task<Void> task)

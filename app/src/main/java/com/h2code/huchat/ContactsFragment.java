@@ -117,6 +117,9 @@ public class ContactsFragment extends Fragment
 if (state.equals("online"))
 {
     holder.onlineIcon.setVisibility(View.VISIBLE);
+
+    holder.userStatus.setText(retStatus);
+
 }
 else if (state.equals("offline"))
 {
@@ -162,7 +165,7 @@ else if (state.equals("offline"))
              @Override
              public void onClick(View view)
              {
-                 Intent profileIntent = new Intent(getContext(), ProfileActivity.class);
+                 Intent profileIntent = new Intent(getContext(), ProfileActivity .class);
                  profileIntent.putExtra("visit_user_id", userIDs);
                  profileIntent.putExtra("visit_user_name", retName);
                  profileIntent.putExtra("visit_image", retImage);
