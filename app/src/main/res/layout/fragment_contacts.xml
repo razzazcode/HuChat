@@ -6,7 +6,9 @@
     tools:context=".ContactsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-
+    <include
+        android:id="@+id/find_friends_toolbar"
+        layout="@layout/app_bar_layout"></include>
 
     <androidx.recyclerview.widget.RecyclerView
 

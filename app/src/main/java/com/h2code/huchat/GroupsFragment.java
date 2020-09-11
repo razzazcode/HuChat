@@ -229,13 +229,13 @@ public class GroupsFragment extends Fragment
                 while (iterator.hasNext())
                 {
 
-    String ng = ((DataSnapshot)iterator.next()).getKey();
+  //  String ng = ((DataSnapshot)iterator.next()).getKey();
 
-                  if (ng .contains("neh"))  {
+               /*   if (ng .contains("neh"))  {
                       set.add(ng);
                   }
-
-                   // set.add(((DataSnapshot)iterator.next()).getKey());
+*/
+                    set.add(((DataSnapshot)iterator.next()).getKey());
                 }
 
                 list_of_groups.clear();
@@ -339,6 +339,30 @@ public class GroupsFragment extends Fragment
         UserGroupesRef.child(groupName).child("GroupeCreator").setValue(currentUserID);
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

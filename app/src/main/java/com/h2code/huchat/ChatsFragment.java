@@ -93,7 +93,7 @@ public class ChatsFragment extends Fragment
 
     private void loadData(String s) {
 
-            Query databasesearchReference =  ChatsRef.orderByChild("Contacts")
+            Query databasesearchReference =  ChatsRef.orderByChild("Contact")
                        .startAt(s)
                     .endAt(s+"\uf8ff");
 

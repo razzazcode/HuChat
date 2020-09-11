@@ -42,7 +42,7 @@ public class RequestsFragment extends Fragment
 
     private DatabaseReference ChatRequestsRef, UsersRef, ContactsRef;
     private FirebaseAuth mAuth;
-    private String currentUserID;
+    private String currentUserID , currentUserName;
 
 
 
@@ -63,6 +63,29 @@ public class RequestsFragment extends Fragment
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         ChatRequestsRef = FirebaseDatabase.getInstance().getReference().child("Chat Requests");
         ContactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
+
+
+        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.exists()){
+                    if (dataSnapshot.hasChild("name")){
+                        currentUserName = dataSnapshot.child("name").getValue().toString();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
 
 
         myRequestsList = (RecyclerView) RequestsFragmentView.findViewById(R.id.chat_requests_list);
@@ -156,14 +179,14 @@ holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
 
 
             ContactsRef.child(currentUserID).child(list_user_id).child("Contact")
-                    .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+                    .setValue(requestUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task)
                 {
                     if (task.isSuccessful())
                     {
                         ContactsRef.child(list_user_id).child(currentUserID).child("Contact")
-       .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+       .setValue(currentUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
    @Override
    public void onComplete(@NonNull Task<Void> task)
    {
@@ -266,14 +289,14 @@ holder.CancelButton.setOnClickListener(new View.OnClickListener() {
              if (i == 0)
              {
                  ContactsRef.child(currentUserID).child(list_user_id).child("Contact")
-            .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+            .setValue(requestUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task)
         {
             if (task.isSuccessful())
             {
                 ContactsRef.child(list_user_id).child(currentUserID).child("Contact")
-              .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+              .setValue(currentUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
           @Override
           public void onComplete(@NonNull Task<Void> task)
                        {

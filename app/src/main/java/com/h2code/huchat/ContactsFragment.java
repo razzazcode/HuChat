@@ -4,9 +4,13 @@ package com.h2code.huchat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -65,18 +70,21 @@ public class ContactsFragment extends Fragment
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
+        loadData("");
+
         return ContactsView;
     }
 
 
-    @Override
-    public void onStart()
-    {
-        super.onStart();
+    private void loadData(String s) {
+
+        Query databasesearchReference =  ContacsRef.orderByChild("Contact")
+                .startAt(s)
+                .endAt(s+"\uf8ff");
 
         FirebaseRecyclerOptions options =
                 new FirebaseRecyclerOptions.Builder<Contacts>()
-                .setQuery(ContacsRef, Contacts.class)
+                .setQuery(databasesearchReference, Contacts.class)
                 .build();
 
 
@@ -201,6 +209,56 @@ else if (state.equals("offline"))
         myContactsList.setAdapter(adapter);
         adapter.startListening();
     }
+
+
+
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu , MenuInflater inflater) {
+
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+
+
+        inflater.inflate(R.menu.searchfrag ,  menu);
+        MenuItem menuItem = menu.findItem(R.id.SearchFragment);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        //  menuItem.setActionView(searchView);
+
+
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+
+                loadData(s);
+
+
+                return false;
+            }
+        });
+
+
+
+
+    }
+
+
+
+
+
 
 
 
