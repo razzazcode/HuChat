@@ -31,6 +31,9 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -69,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity
         InitializeFields();
 
 
-        userName.setVisibility(View.INVISIBLE);
+      //  userName.setVisibility(View.INVISIBLE);
 
 
         UpdateAccountSettings.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +223,13 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
         }
         else
         {
+
+
+
+            ChangeUserNameInMyContactsDataBase();
+
+
+
             HashMap<String, Object> profileMap = new HashMap<>();
             profileMap.put("uid", currentUserID);
             profileMap.put("name", setUserName);
@@ -307,4 +317,53 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
         startActivity(mainIntent);
         finish();
     }
+
+
+
+
+
+
+    private void ChangeUserNameInMyContactsDataBase()
+    {
+        RootRef.child("Contacts").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                Iterator iterator = dataSnapshot.getChildren().iterator();
+
+                while (iterator.hasNext())
+                {
+
+     String newUserName = ((DataSnapshot)iterator.next()).getKey();
+
+       RootRef.child("Contacts").child(newUserName)
+               .child(currentUserID).child("Contact")
+               .setValue(userName.getText().toString());
+               /*   if (ng .contains("neh"))  {
+                      set.add(ng);
+                  }
+*/
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+    }
+
+
+
+
+
 }
