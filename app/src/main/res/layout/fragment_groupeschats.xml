@@ -9,39 +9,62 @@
 
     <Button
         android:id="@+id/GoToChat"
+
+
+        style="?android:textAppearanceSmall"
         android:layout_width="248dp"
         android:layout_height="116dp"
+
+        android:background="@drawable/blue_btn_bkg"
+
+
         android:text="Start Chating With Friends"
+        android:textColor="#fff"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.276"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.133" />
+        app:layout_constraintVertical_bias="0.11" />
 
     <Button
         android:id="@+id/GoToGroupeContacts"
+        style="?android:textAppearanceSmall"
         android:layout_width="248dp"
         android:layout_height="116dp"
+        android:background="@drawable/blue_btn_bkg"
         android:text="Go To Groupe Contacts"
+
+        android:textColor="#fff"
+
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.276"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.541" />
+        app:layout_constraintVertical_bias="0.338" />
 
     <Button
         android:id="@+id/button344"
+
+        style="?android:textAppearanceSmall"
         android:layout_width="198dp"
         android:layout_height="100dp"
+
+        android:background="@drawable/blue_btn_bkg"
+
+
         android:text="PhineCtActivityb"
+        android:textColor="#fff"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.615"
+        app:layout_constraintHorizontal_bias="0.276"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.876" />
+        app:layout_constraintVertical_bias="0.568" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

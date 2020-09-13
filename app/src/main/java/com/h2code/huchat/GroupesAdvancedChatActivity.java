@@ -153,57 +153,57 @@ userImage.setImageResource(R.drawable.profile_image);
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
 
-                        if (i==0){
+    if (i==0){
 
-                            checker = "image";
-
-
-                            Intent intent = new Intent();
+        checker = "image";
 
 
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            intent.setType("image/*");
-                            startActivityForResult(intent.createChooser(intent, "Select image"), 436);
+   Intent intent = new Intent();
 
 
-                        }
-
-                        if (i==1){
-
-                            checker="pdf";
-
-                            Intent intent = new Intent();
+   intent.setAction(Intent.ACTION_GET_CONTENT);
+   intent.setType("image/*");
+   startActivityForResult(intent.createChooser(intent, "Select image"), 436);
 
 
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            intent.setType("application/pdf");
-                            startActivityForResult(intent.createChooser(intent, "Select pdf file"), 436);
+    }
+
+    if (i==1){
+
+        checker="pdf";
+
+        Intent intent = new Intent();
 
 
-
-
-
-
-                        }
-
-                        if (i==2){
-
-                            checker = "docx";
-
-                            Intent intent = new Intent();
-
-
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            intent.setType("application/msword");
-                            startActivityForResult(intent.createChooser(intent, "Select Ms Word File"), 436);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+    intent.setType("application/pdf");
+    startActivityForResult(intent.createChooser(intent, "Select pdf file"), 436);
 
 
 
 
 
 
+}
 
-                        }
+if (i==2){
+
+    checker = "docx";
+
+    Intent intent = new Intent();
+
+
+    intent.setAction(Intent.ACTION_GET_CONTENT);
+    intent.setType("application/msword");
+    startActivityForResult(intent.createChooser(intent, "Select Ms Word File"), 436);
+
+
+
+
+
+
+
+     }
 
 
 
@@ -245,43 +245,43 @@ userImage.setImageResource(R.drawable.profile_image);
 
 
         GroupeChatToolBar = (Toolbar) findViewById(R.id.chat_toolbarGCA);
-        setSupportActionBar(GroupeChatToolBar);
+  setSupportActionBar(GroupeChatToolBar);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(true);
+  ActionBar actionBar = getSupportActionBar();
+  actionBar.setDisplayHomeAsUpEnabled(true);
+  actionBar.setDisplayShowCustomEnabled(true);
 
-        LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View actionBarView = layoutInflater.inflate(R.layout.custom_chat_bar, null);
-        actionBar.setCustomView(actionBarView);
+  LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+  View actionBarView = layoutInflater.inflate(R.layout.custom_chat_bar, null);
+  actionBar.setCustomView(actionBarView);
 
-        userName = (TextView) findViewById(R.id.custom_profile_name);
-        userLastSeen = (TextView) findViewById(R.id.custom_user_last_seen);
-        userImage = (CircleImageView) findViewById(R.id.custom_profile_image);
+  userName = (TextView) findViewById(R.id.custom_profile_name);
+  userLastSeen = (TextView) findViewById(R.id.custom_user_last_seen);
+  userImage = (CircleImageView) findViewById(R.id.custom_profile_image);
 
-        SendMessageButton = (ImageButton) findViewById(R.id.send_message_btnGCA);
-        SendFilesButton = (ImageButton) findViewById(R.id.send_files_btnGCA);
-        MessageInputText = (EditText) findViewById(R.id.input_messageGCA);
+  SendMessageButton = (ImageButton) findViewById(R.id.send_message_btnGCA);
+  SendFilesButton = (ImageButton) findViewById(R.id.send_files_btnGCA);
+  MessageInputText = (EditText) findViewById(R.id.input_messageGCA);
 
-        groupeMessageAdapter = new GroupesMessageAdapter(messagesList);
+  groupeMessageAdapter = new GroupesMessageAdapter(messagesList);
         userMessagesList = (RecyclerView) findViewById(R.id.private_messages_list_of_usersGCA);
-        linearLayoutManager = new LinearLayoutManager(this);
-        userMessagesList.setLayoutManager(linearLayoutManager);
-        userMessagesList.setAdapter(groupeMessageAdapter);
+ linearLayoutManager = new LinearLayoutManager(this);
+ userMessagesList.setLayoutManager(linearLayoutManager);
+ userMessagesList.setAdapter(groupeMessageAdapter);
 
 
-        loadingBar = new ProgressDialog(this);
+ loadingBar = new ProgressDialog(this);
 
 
 
 
-        Calendar calendar = Calendar.getInstance();
+ Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
+ SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+ saveCurrentDate = currentDate.format(calendar.getTime());
 
-        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
-        saveCurrentTime = currentTime.format(calendar.getTime());
+ SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+ saveCurrentTime = currentTime.format(calendar.getTime());
 
 
 
@@ -303,42 +303,42 @@ userImage.setImageResource(R.drawable.profile_image);
         {
 
 
-            loadingBar.setTitle("Sending file ");
-            loadingBar.setMessage("Please wait, your File is uploading...");
-            loadingBar.setCanceledOnTouchOutside(false);
-            loadingBar.show();
+  loadingBar.setTitle("Sending file ");
+  loadingBar.setMessage("Please wait, your File is uploading...");
+  loadingBar.setCanceledOnTouchOutside(false);
+  loadingBar.show();
 
 
 
 
-            fileUri = data.getData();
+  fileUri = data.getData();
 
 
 
-            if (!checker.equals("image")) {
+  if (!checker.equals("image")) {
 
 
-                StorageReference storageReference = FirebaseStorage
-                        .getInstance().getReference() .child("GroupesMainActivity")
-                        .child("Groupes").child(GroupeCreatorId)
-                        .child(currentGroupName).child("DocumentFiles");
+      StorageReference storageReference = FirebaseStorage
+              .getInstance().getReference() .child("GroupesMainActivity")
+              .child("Groupes").child(GroupeCreatorId)
+              .child(currentGroupName).child("DocumentFiles");
 
-                final String messageSenderRef = "Messages/" + currentUserID ;
-              //  final String messageReceiverRef = "Messages/" + messageReceiverID + "/" + messageSenderID;
+      final String messageSenderRef = "Messages/" + currentUserID ;
+    //  final String messageReceiverRef = "Messages/" + messageReceiverID + "/" + messageSenderID;
 
-                DatabaseReference userMessageKeyRef = groupeRootREF2.child("Messages")
-                       .push();
+      DatabaseReference userMessageKeyRef = groupeRootREF2.child("Messages")
+             .push();
 
-                final    String messagePushID = userMessageKeyRef.getKey();
+      final    String messagePushID = userMessageKeyRef.getKey();
 
-                final StorageReference filePath = storageReference
-                        .child(messagePushID + "." + checker);
+final StorageReference filePath = storageReference
+        .child(messagePushID + "." + checker);
 
 
 
-                filePath.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+filePath.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    @Override
+    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {

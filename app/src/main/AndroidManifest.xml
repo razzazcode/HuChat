@@ -18,7 +18,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SearchData"></activity>
         <activity android:name=".PhineCtActivity" />
-        <activity android:name=".FindFriendsSearchActivity" />
         <activity android:name=".CurrentGroupeSContactsSActivity" />
         <activity android:name=".GroupesAdvancedChatActivity" />
         <activity android:name=".GroupeSChatSActivity" />

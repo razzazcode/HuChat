@@ -167,7 +167,8 @@ public class GroupeSChatSActivity extends AppCompatActivity {
 
     private void GetUserInfo()
     {
-        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+        UsersRef.child(currentUserID).
+                addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
