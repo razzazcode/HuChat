@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@drawable/radial_gradient_bkg"
+
+
     tools:context=".GroupesSettingsActivity">
 
 
@@ -21,6 +25,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="90dp"
         android:src="@drawable/profile_image"
+
+        android:background="@drawable/radial_gradient_bkg"
+
+
         app:civ_border_width="5dp"
         app:civ_border_color="@color/colorPrimary"/>
 
@@ -30,16 +38,21 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Groupesset_profile_image"
         android:inputType="textMultiLine"
-        android:hint="username"
+        android:hint="Groupe Name"
         android:textAlignment="center"
         android:drawableStart="@drawable/edit_profile"
-        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
-        android:background="@drawable/inputs"
+        android:background="@drawable/radial_gradient_bkg"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:padding="6dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+
+        android:textColor="@color/colormAINtEXT"
+        android:textColorHint="@color/colormAINtEXT"
+
+
+
         />
 
     <EditText
@@ -48,16 +61,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Groupesset_user_name"
         android:inputType="textMultiLine"
-        android:hint="hey, i am available now."
+        android:hint=" Groupe Status "
         android:textAlignment="center"
         android:drawableStart="@drawable/edit_status"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colormAINtEXT"
         android:textStyle="bold"
-        android:background="@drawable/inputs"
+        android:background="@drawable/radial_gradient_bkg"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:padding="6dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+
+        android:textColorHint="@color/colormAINtEXT"
+
+
         />
 
 
@@ -79,5 +96,24 @@
         android:textAllCaps="false"
         android:textSize="20sp"
         />
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="195dp"
+        android:layout_height="173dp"
+        android:layout_below="@+id/Groupesupdate_settings_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+
+
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="108dp"
+        app:srcCompat="@drawable/logoofapp" />
+
+
+
 
 </RelativeLayout>

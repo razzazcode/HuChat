@@ -12,8 +12,8 @@
 
 
         style="?android:textAppearanceSmall"
-        android:layout_width="248dp"
-        android:layout_height="116dp"
+        android:layout_width="147dp"
+        android:layout_height="73dp"
 
         android:background="@drawable/blue_btn_bkg"
 
@@ -23,16 +23,15 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.276"
+        app:layout_constraintHorizontal_bias="0.098"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.11" />
+        app:layout_constraintVertical_bias="0.136" />
 
     <Button
         android:id="@+id/GoToGroupeContacts"
-        style="?android:textAppearanceSmall"
-        android:layout_width="248dp"
-        android:layout_height="116dp"
+        android:layout_width="146dp"
+        android:layout_height="75dp"
         android:background="@drawable/blue_btn_bkg"
         android:text="Go To Groupe Contacts"
 
@@ -41,17 +40,17 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.276"
+        app:layout_constraintHorizontal_bias="0.06"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.338" />
+        app:layout_constraintVertical_bias="0.282" />
 
     <Button
         android:id="@+id/button344"
 
         style="?android:textAppearanceSmall"
-        android:layout_width="198dp"
-        android:layout_height="100dp"
+        android:layout_width="144dp"
+        android:layout_height="59dp"
 
         android:background="@drawable/blue_btn_bkg"
 
@@ -61,10 +60,10 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.276"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.568" />
+        app:layout_constraintVertical_bias="0.416" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

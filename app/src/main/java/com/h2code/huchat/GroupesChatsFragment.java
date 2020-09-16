@@ -65,14 +65,19 @@ public class GroupesChatsFragment extends Fragment
         Button344 = PrivateChatsView.findViewById(R.id.button344);
 
 
-                CurrentgroupeName  = getActivity().getIntent().getExtras().get("groupName").toString();
+  CurrentgroupeName  = getActivity().getIntent().getExtras()
+          .get("groupName").toString();
 
-      //  CurrentGroupeCreatorId = getArguments().getString("GroupeCreatorId");
+
+
+        CurrentGroupeCreatorId =  getActivity().getIntent().getExtras()
+                .get("GroupeCreatorID").toString();
+
+
         GetUserInfo();
         GoToChat.setText(" Start Chating with Friends in \n "  + CurrentgroupeName + " \n Groupe");
 
 
-        System.out.println("henna henna");
 
 
 
@@ -183,7 +188,7 @@ public class GroupesChatsFragment extends Fragment
 
                     CurrentUserName = dataSnapshot.child("name").getValue().toString();
 
-                    CurrentGroupeCreatorId = dataSnapshot.child("OwnGrpName").child(CurrentgroupeName).child("GroupeCreator").getValue().toString();
+                 //   CurrentGroupeCreatorId = dataSnapshot.child("OwnGrpName").child(CurrentgroupeName).child("GroupeCreator").getValue().toString();
 
 
                 }

@@ -2,7 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
-android:layout_height="match_parent"
+
+    android:background="@drawable/radial_gradient_bkg"
+
+
+    android:layout_height="match_parent"
 tools:context=".CurrentGroupeSContactsSActivity">
 
 <!-- TODO: Update blank fragment layout -->

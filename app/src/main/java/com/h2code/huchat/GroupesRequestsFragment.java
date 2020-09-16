@@ -45,7 +45,7 @@ public class GroupesRequestsFragment extends Fragment
 
     private DatabaseReference ChatRequestsRef, GroupesContactsOfAgroupetRef,  UsersRef, ContactsRef , GroupesRequestsFragmentRef;
     private FirebaseAuth mAuth;
-    private String currentUserID;
+    private String currentUserID , currentUserUserName;
 
 
 
@@ -64,6 +64,14 @@ public class GroupesRequestsFragment extends Fragment
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+
+
+
+
+
+
         ChatRequestsRef = FirebaseDatabase.getInstance().getReference().child("Chat Requests");
         ContactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
 
@@ -212,7 +220,22 @@ final String  GroupeCreatorUserName = dataSnapshot.child("GroupeCreatorUserName"
          public void onClick(View v) {
 
 
+             UsersRef .child(currentUserID).child("name") .addValueEventListener(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+
+                     if (dataSnapshot.exists())
+                     {
+                          currentUserUserName = dataSnapshot.getValue().toString();
+
+                     } }
+
+                 @Override
+                 public void onCancelled(@NonNull DatabaseError error) {
+
+                 }
+             });
 
 
 
@@ -220,7 +243,7 @@ final String  GroupeCreatorUserName = dataSnapshot.child("GroupeCreatorUserName"
     GroupesContactsOfAgroupetRef.child(requestGroupeCreator).child(list_GroupeNmae)
 
             .child("ContactsOfTheGroupe").child(currentUserID).child("contact")
-           .setValue("").addOnCompleteListener(new OnCompleteListener<Void>() {
+           .setValue(currentUserUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
        @Override
        public void onComplete(@NonNull Task<Void> task)
                 {
@@ -342,7 +365,7 @@ final String  GroupeCreatorUserName = dataSnapshot.child("GroupeCreatorUserName"
              {
                  GroupesContactsOfAgroupetRef.child(list_GroupeNmae)
                          .child(currentUserID).child("Contact")
-            .setValue("Saved").addOnCompleteListener(new OnCompleteListener<Void>() {
+            .setValue(currentUserUserName).addOnCompleteListener(new OnCompleteListener<Void>() {
         @Override
         public void onComplete(@NonNull Task<Void> task)
         {

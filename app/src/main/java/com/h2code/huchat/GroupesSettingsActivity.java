@@ -256,7 +256,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
                                 Toast.makeText(GroupesSettingsActivity.this, "Profile Updated Successfully...", Toast.LENGTH_SHORT).show();
 
 
-                                SendUserToMainActivity();
+                  //               SendUserToMainActivity();
                             }
                             else
                             {
@@ -277,20 +277,20 @@ public class GroupesSettingsActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                        if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name") && (dataSnapshot.hasChild("image"))))
-                        {
-                            String retrieveUserName = dataSnapshot.child("name").getValue().toString();
-                            String retrievesStatus = dataSnapshot.child("status").getValue().toString();
-                            String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
+        if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name") && (dataSnapshot.hasChild("image"))))
+        {
+            String retrieveUserName = dataSnapshot.child("name").getValue().toString();
+            String retrievesStatus = dataSnapshot.child("status").getValue().toString();
+            String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
 
-                            userName.setText(retrieveUserName);
-                            userStatus.setText(retrievesStatus);
-                            Picasso.get().load(retrieveProfileImage).into(userProfileImage);
-
-
+            userName.setText(retrieveUserName);
+            userStatus.setText(retrievesStatus);
+            Picasso.get().load(retrieveProfileImage).into(userProfileImage);
 
 
-                            //  Picasso.with(Settingsactivity.this).load(retrieveProfileImage).into(userProfileImage);
+
+
+            //  Picasso.with(Settingsactivity.this).load(retrieveProfileImage).into(userProfileImage);
 
 
 
@@ -324,9 +324,16 @@ public class GroupesSettingsActivity extends AppCompatActivity
 
     private void SendUserToMainActivity()
     {
-        Intent mainIntent = new Intent(GroupesSettingsActivity.this, GroupeChat2.class);
-        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(mainIntent);
+        Intent groupChatIntent = new Intent(GroupesSettingsActivity.this, GroupeChat2.class);
+
+        groupChatIntent.putExtra("groupName" , CurrentgroupeName);
+
+
+        groupChatIntent.putExtra("GroupeCreatorID" , CurrentGroupeCreatorId);
+
+
+        groupChatIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(groupChatIntent);
         finish();
     }
 }

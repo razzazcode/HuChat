@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -40,9 +41,9 @@ public class GroupeChat2 extends AppCompatActivity
     private GroupesTabAccessorAdapter myTabsAccessorAdapter;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference GroupeRootRef , RootRef , UserGroupesRef , UsersRef;
-    private String currentUserID , CurrentgroupeName , CurrentUserName ;
-public String CurrentGroupeCreatorId ;
+    private DatabaseReference   GroupeRootRef ,RootRef , UserGroupesRef , UsersRef;
+    private String currentUserID , CurrentgroupeName , CurrentUserName ,
+            CurrentgroupeCreatorId ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -68,21 +69,33 @@ FirebaseApp.initializeApp(MainActivity.this);
 
 
 
-        CurrentgroupeName = getIntent().getExtras().get("groupName").toString();
-
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
+ CurrentgroupeName = getIntent().getExtras().
+        get("groupName").toString();
 
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
-        RootRef = FirebaseDatabase.getInstance().getReference();
+System.out.println(CurrentgroupeName);
 
 
-        GetUserInfo();
+        CurrentUserName =  getIntent().getExtras().
+                get("CurrentUserName").toString();
 
-        GroupeRootRef = FirebaseDatabase.getInstance().getReference()
-                .child("GroupesMainActivity").child("Groupes") ;
+        GettingCurrentGroupeCreatorID();
+
+
+
+
+ UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+
+ mAuth = FirebaseAuth.getInstance();
+ currentUserID = mAuth.getCurrentUser().getUid();
+ RootRef = FirebaseDatabase.getInstance().getReference();
+
+
+
+ GroupeRootRef = FirebaseDatabase.getInstance().getReference()
+         .child("GroupesMainActivity").child("Groupes") ;
 
 
         UserGroupesRef = FirebaseDatabase.getInstance().getReference()
@@ -108,6 +121,53 @@ FirebaseApp.initializeApp(MainActivity.this);
         myTabLayout.setupWithViewPager(myViewPager);
     }
 
+
+
+    private void GettingCurrentGroupeCreatorID() {
+
+
+        System.out.println(CurrentgroupeName);
+
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        UserGroupesRef = FirebaseDatabase.getInstance().getReference()
+                .child("Users")
+                .child(currentUserID)
+                .child("OwnGrpName");
+
+        UserGroupesRef
+
+
+                .child(CurrentgroupeName)
+                .addValueEventListener(new ValueEventListener() {
+   @Override
+   public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+       if (dataSnapshot.hasChild("GroupeCreator")) {
+
+           CurrentgroupeCreatorId = dataSnapshot.child("GroupeCreator")
+                   .getValue().toString();
+
+       }
+
+   }
+
+   @Override
+   public void onCancelled(@NonNull DatabaseError databaseError) {
+
+   }
+
+                });
+
+
+
+
+    }
+
+
+
+    /*
     private void GettingGroupeCreatorId() {
 
         UserGroupesRef = FirebaseDatabase.getInstance().getReference()
@@ -144,34 +204,13 @@ FirebaseApp.initializeApp(MainActivity.this);
         grocreatorid.setArguments(grpcreatorbundle);
 
 
-    }
+    } */
 
 
 
 
 
-    private void GetUserInfo() {
-        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
 
-                    CurrentUserName = dataSnapshot.child("name").getValue().toString();
-
-                    CurrentGroupeCreatorId = dataSnapshot.child("OwnGrpName").child(CurrentgroupeName).child("GroupeCreator").getValue().toString();
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-    }
 
 
 
@@ -223,10 +262,13 @@ FirebaseApp.initializeApp(MainActivity.this);
     {
         super.onCreateOptionsMenu(menu);
 
-      //  if (currentUserID == CurrentGroupeCreatorId ) {
+
+
+
+        if (currentUserID .equals(CurrentgroupeCreatorId)  ) {
 
             getMenuInflater().inflate(R.menu.groupes_menu, menu);
-
+        }
         return true;
     }
 
@@ -286,7 +328,7 @@ FirebaseApp.initializeApp(MainActivity.this);
         settingsIntent.putExtra("CurrentUserName", CurrentUserName);
 
 
-        settingsIntent.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+        settingsIntent.putExtra("CurrentGroupeCreatorId", CurrentgroupeCreatorId);
 
 
 
@@ -304,7 +346,7 @@ FirebaseApp.initializeApp(MainActivity.this);
         findFriendsIntent.putExtra("CurrentUserName", CurrentUserName);
 
 
-        findFriendsIntent.putExtra("CurrentGroupeCreatorId", CurrentGroupeCreatorId);
+        findFriendsIntent.putExtra("CurrentGroupeCreatorId", CurrentgroupeCreatorId);
 
         startActivity(findFriendsIntent);
     }

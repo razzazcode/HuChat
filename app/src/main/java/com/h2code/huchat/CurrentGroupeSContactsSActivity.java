@@ -50,7 +50,7 @@ public class CurrentGroupeSContactsSActivity extends AppCompatActivity {
     private DatabaseReference ContacsRef, UsersRef ,
             GroupesUsersRef , CurrentGroupeContacsRef;
     private FirebaseAuth mAuth;
-    private String currentUserID , CurrentgroupeName , GroupeCreatorID;
+    private String currentUserID , CurrentgroupeName , GroupeCreatorID, CurrentUserName;
 
 
 
@@ -82,6 +82,7 @@ public class CurrentGroupeSContactsSActivity extends AppCompatActivity {
  CurrentgroupeName = getIntent().getExtras().get("CurrentgroupeName").toString();
  GroupeCreatorID = getIntent().getExtras().get("CurrentGroupeCreatorId").toString();
 
+        CurrentUserName = getIntent().getExtras().get("CurrentUserName").toString();
 
 
  GroupesUsersRef = FirebaseDatabase.getInstance().getReference()
@@ -139,11 +140,13 @@ new FirebaseRecyclerOptions.Builder<Contacts>()
             {
                 if (dataSnapshot.exists())
     {
+
+
         if (dataSnapshot.child("userState").hasChild("state"))
         {
    String state = dataSnapshot.child("userState").child("state").getValue().toString();
-   String date = dataSnapshot.child("userState").child("date").getValue().toString();
-   String time = dataSnapshot.child("userState").child("time").getValue().toString();
+             String   date = dataSnapshot.child("userState").child("date").getValue().toString();
+            String  time = dataSnapshot.child("userState").child("time").getValue().toString();
 
    if (state.equals("online"))
    {
@@ -152,11 +155,19 @@ new FirebaseRecyclerOptions.Builder<Contacts>()
    else if (state.equals("offline"))
    {
        holder.onlineIcon.setVisibility(View.INVISIBLE);
-     }
+
+       holder.userStatus.setText("Last Seen: " + date + " " + time);
+
+
+   }
  }
  else
  {
      holder.onlineIcon.setVisibility(View.INVISIBLE);
+
+
+
+
  }
 
 

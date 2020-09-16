@@ -47,9 +47,9 @@ public class GroupsFragment extends Fragment
 
     private Button  createNewGroupe;
 
-    private DatabaseReference GroupRef , groupeRootREF2 , UserGroupesRef , UserssRef;
+    private DatabaseReference generalGroupesRef, UserGroupesRef , UsersRef;
 
-    private String currentUserID , GroupeCreatorUserName , currentGroupName , GroupeCreatorUserID = "6GEfJvKo3wX3Yia7AOVFzkroPOj1" ;
+    private String CurrentUserName , currentUserID  , currentGroupName , CurrentGroupeCreatorId  ;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
 
@@ -70,23 +70,22 @@ public class GroupsFragment extends Fragment
 
 
 
-        GroupRef = FirebaseDatabase.getInstance().getReference().child("Groups");
 
-        groupeRootREF2= FirebaseDatabase.getInstance().getReference()
+        generalGroupesRef = FirebaseDatabase.getInstance().getReference()
                 .child("GroupesMainActivity").child("Groupes");
 
 
         UserGroupesRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(currentUserID).child("OwnGrpName");
 
-        UserssRef = FirebaseDatabase.getInstance().getReference()
+        UsersRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users");
 
 
 
-        GettingCreatorUserName();
 
 
+        GetCurrentUserUserName();
 
 
         IntializeFields();
@@ -113,92 +112,28 @@ public class GroupsFragment extends Fragment
 
 
 
-
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
             {
-                currentGroupName = adapterView.getItemAtPosition(position).toString();
+     currentGroupName = adapterView.getItemAtPosition(position).toString();
+
+                GetCurrentGroupeCreatorId();
+
+createNewGroupe.setText(currentGroupName);
 
 
-                GettingCurrentGroupeCreatorID();
 
-            }
+ }
         });
 
 
         return groupFragmentView;
-    }
-
-    private void GettingCurrentGroupeCreatorID() {
-
-
-        UserGroupesRef.child(currentGroupName)
-                .addValueEventListener(new ValueEventListener() {
-    @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-        if (dataSnapshot.hasChild("GroupeCreator")) {
-
-            GroupeCreatorUserID = dataSnapshot.child("GroupeCreator")
-                    .getValue().toString();
-
-                      System.out.println(GroupeCreatorUserID);
-
-
-        }
-
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-
-                });
-
-        Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
-        groupChatIntent.putExtra("groupName" , currentGroupName);
-
-
-        groupChatIntent.putExtra("GroupeCreatorID" , GroupeCreatorUserID);
-
-
-        startActivity(groupChatIntent);
-
-    }
-
-
-    private void GettingCreatorUserName() {
-
-
- UserssRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChild("name")) {
-
-    GroupeCreatorUserName = dataSnapshot.child("name")
-           .getValue().toString();
-
-                }
-
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
 
 
     }
+
+
 
 
     private void IntializeFields()
@@ -311,15 +246,15 @@ public class GroupsFragment extends Fragment
 
 
 
-        GettingCreatorUserName();
+      //  GettingCreatorUserName();
 
-         groupeRootREF2.child(currentUserID).child(groupName).child("GroupeName").setValue(groupName);
+         generalGroupesRef.child(currentUserID).child(groupName).child("GroupeName").setValue(groupName);
 
-        groupeRootREF2.child(currentUserID).child(groupName).child("GroupeCreator")
+        generalGroupesRef.child(currentUserID).child(groupName).child("GroupeCreator")
                 .setValue(currentUserID);
 
-        groupeRootREF2.child(currentUserID).child(groupName).child("GroupeCreatorUserName")
-                .setValue(GroupeCreatorUserName)
+        generalGroupesRef.child(currentUserID).child(groupName).child("GroupeCreatorUserName")
+                .setValue(CurrentUserName)
 
 
 
@@ -348,12 +283,76 @@ public class GroupsFragment extends Fragment
 
 
 
+    private void GetCurrentUserUserName() {
+        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+     if (dataSnapshot.exists()) {
+
+         CurrentUserName = dataSnapshot.child("name").getValue().toString();
+
+
+
+
+     }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
+
+
+    private void GetCurrentGroupeCreatorId() {
+        UsersRef.child(currentUserID).child("OwnGrpName").child(currentGroupName)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+       public void onDataChange(DataSnapshot dataSnapshot) {
+           if (dataSnapshot.exists()) {
+
+               CurrentGroupeCreatorId =
+         dataSnapshot.child("GroupeCreator").getValue().toString();
+
+
+
+               Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
+               groupChatIntent.putExtra("groupName" , currentGroupName);
+
+
+
+
+               groupChatIntent.putExtra("GroupeCreatorID" , CurrentGroupeCreatorId);
+
+               groupChatIntent.putExtra("CurrentUserName", CurrentUserName);
+
+               startActivity(groupChatIntent);
 
 
 
 
 
 
+
+
+
+
+           }
+       }
+
+       @Override
+       public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+    }
 
 
 
