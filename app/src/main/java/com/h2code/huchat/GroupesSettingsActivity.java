@@ -37,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GroupesSettingsActivity extends AppCompatActivity
 {
     private Button UpdateAccountSettings;
-    private EditText userName, userStatus;
+    private EditText GrouoeuserName, userStatus;
     private CircleImageView userProfileImage;
 
     private String currentUserID , profilepicLink , gropeName ,CurrentgroupeName ,
@@ -91,7 +91,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
         InitializeFields();
 
 
-        userName.setVisibility(View.INVISIBLE);
+        GrouoeuserName.setVisibility(View.INVISIBLE);
 
 
         UpdateAccountSettings.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +123,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
     private void InitializeFields()
     {
         UpdateAccountSettings = (Button) findViewById(R.id.Groupesupdate_settings_button);
-        userName = (EditText) findViewById(R.id.Groupesset_user_name);
+        GrouoeuserName = (EditText) findViewById(R.id.Groupesset_user_name);
         userStatus = (EditText) findViewById(R.id.Groupesset_profile_status);
         userProfileImage = (CircleImageView) findViewById(R.id.Groupesset_profile_image);
         loadingBar = new ProgressDialog(this);
@@ -168,17 +168,20 @@ public class GroupesSettingsActivity extends AppCompatActivity
 
 
 
-                final  StorageReference filePath = GroupeProfileImagesRef.child(currentUserID + ".jpg");
+   final  StorageReference filePath = GroupeProfileImagesRef.
+           child(currentUserID + ".jpg");
 
-                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+   filePath.putFile(resultUri).addOnCompleteListener
+           (new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
                     {
                         if (task.isSuccessful())
        {
            Toast.makeText(GroupesSettingsActivity.this, "Profile Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
 
-           // final String downloaedUrl = task.getResult().getDownloadUrl().toString();
+ // final String picdownloadUrl = task.getResult().getStorage()
+        //  .getDownloadUrl().getResult().toString();
 
 
 
@@ -193,33 +196,33 @@ public class GroupesSettingsActivity extends AppCompatActivity
            //  task.getResult().getMetadata().getReference().getDownloadUrl().toString();
 
            RootRef.child("CurrentGroupesettings").child("image")
-                                    .setValue(profilepicLink)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            if (task.isSuccessful())
-                                            {
-                                                Toast.makeText(GroupesSettingsActivity.this, "Image save in Database, Successfully...", Toast.LENGTH_SHORT).show();
-                                                loadingBar.dismiss();
-                                            }
-                                            else
-                                            {
-                                                String message = task.getException().toString();
-                                                Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                                                loadingBar.dismiss();
-                                            }
-                                        }
-                                    });
-                        }
-                        else
-                        {
-                            String message = task.getException().toString();
-                            Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                            loadingBar.dismiss();
-                        }
-                    }
-                });
+     .setValue(profilepicLink)
+     .addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task)
+         {
+      if (task.isSuccessful())
+   {
+       Toast.makeText(GroupesSettingsActivity.this, "Image save in Database, Successfully...", Toast.LENGTH_SHORT).show();
+       loadingBar.dismiss();
+   }
+   else
+   {
+       String message = task.getException().toString();
+       Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+       loadingBar.dismiss();
+     }
+ }
+                            });
+  }
+  else
+  {
+      String message = task.getException().toString();
+      Toast.makeText(GroupesSettingsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+      loadingBar.dismiss();
+          }
+      }
+  });
             }
         }
     }
@@ -229,7 +232,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
 
     private void UpdateSettings()
     {
-        String setUserName = userName.getText().toString();
+        String setUserName = GrouoeuserName.getText().toString();
         String setStatus = userStatus.getText().toString();
 
         if (TextUtils.isEmpty(setUserName))
@@ -283,7 +286,7 @@ public class GroupesSettingsActivity extends AppCompatActivity
             String retrievesStatus = dataSnapshot.child("status").getValue().toString();
             String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
 
-            userName.setText(retrieveUserName);
+            GrouoeuserName.setText(retrieveUserName);
             userStatus.setText(retrievesStatus);
             Picasso.get().load(retrieveProfileImage).into(userProfileImage);
 
@@ -303,12 +306,12 @@ public class GroupesSettingsActivity extends AppCompatActivity
                             String retrieveUserName = dataSnapshot.child("name").getValue().toString();
                             String retrievesStatus = dataSnapshot.child("status").getValue().toString();
 
-                            userName.setText(retrieveUserName);
+                            GrouoeuserName.setText(retrieveUserName);
                             userStatus.setText(retrievesStatus);
                         }
                         else
                         {
-                            userName.setVisibility(View.VISIBLE);
+                            GrouoeuserName.setVisibility(View.VISIBLE);
                             Toast.makeText(GroupesSettingsActivity.this, "Please set & update your profile information...", Toast.LENGTH_SHORT).show();
                         }
                     }

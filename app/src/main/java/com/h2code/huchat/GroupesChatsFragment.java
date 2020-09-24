@@ -74,6 +74,17 @@ public class GroupesChatsFragment extends Fragment
                 .get("GroupeCreatorID").toString();
 
 
+
+
+
+
+
+
+
+
+
+
+
         GetUserInfo();
         GoToChat.setText(" Start Chating with Friends in \n "  + CurrentgroupeName + " \n Groupe");
 

@@ -81,61 +81,6 @@ loadData("");
         }
 
 
-/*
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-
-
-
-
-
-
-
-
-        FirebaseRecyclerOptions<Contacts> options =
-                new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(UsersRef, Contacts.clas .build();
-
-        FirebaseRecyclerAdapter<Contacts, SearchDataViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Contacts, SearchDataViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull SearchDataViewHolder holder, final int position, @NonNull Contacts model)
-                    {
-                        holder.userName.setText(model.getName());
-                        holder.userStatus.setText(model.getStatus());
-                        Picasso.get().load(model.getImage()).placeholder(R.drawable.profile_image).into(holder.profileImage);
-
-
-             holder.itemView.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View view)
-                 {
-                     String visit_user_id = getRef(position).getKey();
-
-                     Intent profileIntent = new Intent(SearchData.this, ProfileActivity.class);
-                     profileIntent.putExtra("visit_user_id", visit_user_id);
-                     startActivity(profileIntent);
-                 }
-             });
-         }
-
-         @NonNull
-         @Override
-         public SearchDataViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
-         {
-             View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
-             SearchDataViewHolder viewHolder = new SearchDataViewHolder(view);
-             return viewHolder;
-                    }
-                };
-
-        FindFriendsRecyclerList.setAdapter(adapter);
-
-        adapter.startListening();
-    }
-*/
 
     public static  class SearchDataViewHolder extends RecyclerView.ViewHolder
     {

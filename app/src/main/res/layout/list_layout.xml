@@ -24,7 +24,7 @@
         android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/profile_image"
         android:text="Username"
-        android:textColor="#555555"
+        android:textColor="#FFFFFF"
         android:textSize="16sp" />
 
     <TextView
@@ -37,6 +37,6 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/profile_image"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-        android:textColor="#999999"
+        android:textColor="#FFFFFF"
         android:textSize="14sp" />
 </RelativeLayout>

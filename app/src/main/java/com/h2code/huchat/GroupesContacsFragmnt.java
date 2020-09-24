@@ -39,7 +39,7 @@ public class GroupesContacsFragmnt extends Fragment
 
     private DatabaseReference ContacsRef, UsersRef , GroupesUsersRef;
     private FirebaseAuth mAuth;
-    private String currentUserID , CurrentgroupeName;
+    private String currentUserID , CurrentgroupeName , GroupeCreatorID;
 
 
     public GroupesContacsFragmnt() {
@@ -63,10 +63,20 @@ public class GroupesContacsFragmnt extends Fragment
 
 
         CurrentgroupeName = getActivity().getIntent().getExtras().get("groupName").toString();
+        GroupeCreatorID = getActivity().getIntent().getExtras().get("GroupeCreatorID").toString();
+
+
+        ContacsRef = FirebaseDatabase.getInstance().getReference()
+                .child("GroupesMainActivity").child("Groupes")
+                .child(GroupeCreatorID).child(CurrentgroupeName)
+                .child("ContactsOfTheGroupe");
 
 
 
-        ContacsRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(currentUserID);
+
+
+
+
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
         GroupesUsersRef = FirebaseDatabase.getInstance().getReference()

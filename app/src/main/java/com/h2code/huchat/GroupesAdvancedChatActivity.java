@@ -34,6 +34,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -76,7 +77,7 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
     private RecyclerView userMessagesList;
 
 
-    private String saveCurrentTime, saveCurrentDate;
+    private String   saveCurrentTime, saveCurrentDate;
 
     private String checker="" , myUri="";
 
@@ -116,7 +117,42 @@ public class GroupesAdvancedChatActivity extends AppCompatActivity {
         userName.setText(currentGroupName);
       // Picasso.get().load().placeholder(R.drawable.profile_image).into(userImage);
 
-userImage.setImageResource(R.drawable.profile_image);
+
+
+
+        groupeRootREF2.child("CurrentGroupesettings")
+   .addValueEventListener(new ValueEventListener() {
+       @Override
+       public void onDataChange(DataSnapshot dataSnapshot)
+       {
+           if ((dataSnapshot.exists()) && (dataSnapshot.hasChild("name") && (dataSnapshot.hasChild("image"))))
+           {
+               String retrievesStatus = dataSnapshot.child("status").getValue().toString();
+               String retrieveProfileImage = dataSnapshot.child("image").getValue().toString();
+
+               userLastSeen.setText(retrievesStatus);
+  Picasso.get().load(retrieveProfileImage).into(userImage);
+
+
+           }
+
+
+      }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+                });
+
+
+
+
+
+
+     //   Picasso.get().load(retrieveProfileImage).into(userImage);
+
+ // userImage.setImageResource(R.drawable.profile_image);
 
 
         SendMessageButton.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +164,7 @@ userImage.setImageResource(R.drawable.profile_image);
         });
 
 
-        DisplayLastSeen();
+       // DisplayLastSeen();
 
 
 

@@ -134,6 +134,7 @@ private ProgressDialog loadingBar;
    "Image",
           "PDF Files",
           "Ms Word Files"
+                 , " Sound file"
   };
 
 
@@ -196,6 +197,24 @@ startActivityForResult(intent.createChooser(intent, "Select Ms Word File"), 435)
 
 
           }
+
+
+
+          if (i==3){
+
+              checker = "audio";
+
+
+              Intent intent = new Intent();
+
+
+              intent.setAction(Intent.ACTION_GET_CONTENT);
+              intent.setType("audio/*");
+              startActivityForResult(intent.createChooser(intent, "Select audio"), 435);
+
+
+          }
+
 
 
 
@@ -447,6 +466,120 @@ else if (checker.equals("image")) {
 
          }
 
+
+
+
+else if (checker.equals("audio")) {
+
+
+
+    StorageReference storageReference = FirebaseStorage
+            .getInstance().getReference().child("SoundFiles");
+
+    final String messageSenderRef = "Messages/" + messageSenderID + "/" + messageReceiverID;
+    final String messageReceiverRef = "Messages/" + messageReceiverID + "/" + messageSenderID;
+
+    DatabaseReference userMessageKeyRef = RootRef.child("Messages")
+            .child(messageSenderID).child(messageReceiverID).push();
+
+    final    String messagePushID = userMessageKeyRef.getKey();
+
+    final StorageReference filePath = storageReference
+            .child(messagePushID + "." + "mp3");
+
+
+
+    uploadTask = filePath.putFile(fileUri);
+
+    uploadTask.continueWithTask(new Continuation() {
+        @Override
+        public Object then(@NonNull Task task) throws Exception {
+
+            if (!task.isSuccessful()) {
+
+                throw task.getException();
+            }
+
+            return filePath.getDownloadUrl();
+        }
+    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+        @Override
+        public void onComplete(@NonNull Task<Uri> task) {
+
+
+            if (task.isSuccessful()) {
+
+
+
+
+                Uri downloadUri = task.getResult();
+
+                myUri = downloadUri.toString();
+
+
+                Map messageimageBody = new HashMap();
+                messageimageBody.put("message", myUri);
+
+                messageimageBody.put("name", fileUri.getLastPathSegment());
+
+
+                messageimageBody.put("type", checker);
+                messageimageBody.put("from", messageSenderID);
+                messageimageBody.put("to", messageReceiverID);
+                messageimageBody.put("messageID", messagePushID);
+                messageimageBody.put("time", saveCurrentTime);
+                messageimageBody.put("date", saveCurrentDate);
+
+                Map messageBodyDetails = new HashMap();
+                messageBodyDetails.put(messageSenderRef + "/" + messagePushID, messageimageBody);
+                messageBodyDetails.put( messageReceiverRef + "/" + messagePushID, messageimageBody);
+
+                RootRef.updateChildren(messageBodyDetails).addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            loadingBar.dismiss();
+
+                            Toast.makeText(ChatActivity.this, "Message Sent Successfully...", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+
+                            loadingBar.dismiss();
+
+
+
+                            Toast.makeText(ChatActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        }
+                        MessageInputText.setText("");
+                    }
+                });
+
+
+
+            }
+
+
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
          else
              {
 
@@ -593,6 +726,19 @@ else if (checker.equals("image")) {
    });
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

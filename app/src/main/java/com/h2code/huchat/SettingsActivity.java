@@ -244,7 +244,7 @@ filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadT
                                 Toast.makeText(SettingsActivity.this, "Profile Updated Successfully...", Toast.LENGTH_SHORT).show();
 
 
-                                SendUserToMainActivity();
+                               // SendUserToMainActivity();
                             }
                             else
                             {

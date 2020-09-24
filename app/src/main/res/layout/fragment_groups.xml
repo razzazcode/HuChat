@@ -6,34 +6,35 @@
     tools:context=".GroupsFragment">
 
 
-
-
-    <include
-        android:id="@+id/find_friends_toolbar"
-        layout="@layout/app_bar_layout"></include>
-
-
-
     <Button
+        android:id="@+id/createnewgroupe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/createnewgroupe"
         android:layout_alignParentTop="true"
 
 
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="7dp"
 
 
         android:text="Create new Groupe" />
 
+<!--
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/list_view"
+        android:layout_width="370dp"
+        android:layout_height="215dp"
+        android:layout_marginTop="60dp"
+
+        />
+-->
 
     <ListView
         android:id="@+id/list_view"
-        android:layout_width="143dp"
+        android:layout_width="142dp"
+        android:layout_height="250dp"
 
-        android:layout_height="296dp"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="60dp"
 
 
         />
@@ -43,14 +44,12 @@
     <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/list_view2"
-        android:layout_width="248dp"
-        android:layout_height="176dp"
+        android:layout_width="377dp"
+        android:layout_height="267dp"
         android:layout_below="@+id/list_view"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="14dp"/>
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp" />
 
 
 </RelativeLayout>

@@ -18,7 +18,7 @@
         android:layout_marginTop="200dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="contact_number"
+        android:hint="write contact_name"
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="148dp" />
 
@@ -30,7 +30,7 @@
         android:layout_marginTop="368dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="contact_number"
+        android:hint="please write contact_number"
         android:inputType="textPersonName"
        />
 

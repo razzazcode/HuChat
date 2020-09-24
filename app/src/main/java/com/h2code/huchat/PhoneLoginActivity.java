@@ -134,6 +134,8 @@ public class PhoneLoginActivity extends AppCompatActivity
             {
                 loadingBar.dismiss();
                 Toast.makeText(PhoneLoginActivity.this,
+
+    e +
     "Invalid Phone Number, Please enter correct phone number with your country code...",
                         Toast.LENGTH_SHORT).show();
 
