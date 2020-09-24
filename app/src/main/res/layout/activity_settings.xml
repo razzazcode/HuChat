@@ -96,6 +96,9 @@ android:background="@color/colorPrimary"
         android:layout_marginStart="108dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="108dp"
-        app:srcCompat="@drawable/logoofapp" />
+        app:srcCompat="@drawable/logoofapp"
+
+
+         />
 
 </RelativeLayout>
