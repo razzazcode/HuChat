@@ -220,8 +220,9 @@ public class ChatsFragment extends Fragment
         MenuItem menuItem = menu.findItem(R.id.SearchFragment);
         SearchView searchView = (SearchView) menuItem.getActionView();
 
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
-      //  menuItem.setActionView(searchView);
+        menuItem.setShowAsAction
+  (MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+      //  menuItem.setActioniView(searchView);
 
 
 
