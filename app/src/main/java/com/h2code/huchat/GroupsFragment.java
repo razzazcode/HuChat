@@ -51,7 +51,7 @@ public class GroupsFragment extends Fragment
 
 
 
-    private RecyclerView myRequestsList , list_view22;
+    private RecyclerView myRequestsList , list_view22 , list_viewr;
 
 
     private View groupFragmentView;
@@ -158,6 +158,12 @@ public class GroupsFragment extends Fragment
         myRequestsList = (RecyclerView) groupFragmentView.findViewById(R.id.list_view2);
         myRequestsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        list_viewr = (RecyclerView) groupFragmentView.findViewById(R.id.list_viewr);
+        list_viewr.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+
+
 
         list_view22 = (RecyclerView) groupFragmentView.findViewById(R.id.list_view2);
         list_view22.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -176,7 +182,7 @@ public class GroupsFragment extends Fragment
 
     private void IntializeFields()
     {
-        list_view = (ListView) groupFragmentView.findViewById(R.id.list_view);
+       // list_view =  groupFragmentView.findViewById(R.id.list_view);
         arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list_of_groups);
 
 
@@ -412,24 +418,24 @@ public class GroupsFragment extends Fragment
 
 
         FirebaseRecyclerAdapter<Contacts, RequestsGropesViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Contacts, RequestsGropesViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull final RequestsGropesViewHolder holder, final int position, @NonNull Contacts model)
-                    {
-                        holder.itemView.findViewById(R.id.request_accept_btn).setVisibility(View.VISIBLE);
-                        holder.itemView.findViewById(R.id.request_cancel_btn).setVisibility(View.VISIBLE);
+   new FirebaseRecyclerAdapter<Contacts, RequestsGropesViewHolder>(options) {
+       @Override
+       protected void onBindViewHolder(@NonNull final RequestsGropesViewHolder holder, final int position, @NonNull Contacts model)
+       {
+           holder.itemView.findViewById(R.id.request_accept_btn).setVisibility(View.VISIBLE);
+   holder.itemView.findViewById(R.id.request_cancel_btn).setVisibility(View.VISIBLE);
 
 
-                        final String list_GroupeNmae = getRef(position).getKey();
-
-
-
+   final String list_GroupeNmae = getRef(position).getKey();
 
 
 
 
-                        DatabaseReference getTypeRef = getRef(position)
-                                .child("request_type").getRef();
+
+
+
+     DatabaseReference getTypeRef = getRef(position)
+             .child("request_type").getRef();
 
 
 
@@ -925,7 +931,16 @@ public class GroupsFragment extends Fragment
     }
 
 
+    private void loadData(String s) {
 
+
+
+
+
+
+
+
+    }
 
 
 

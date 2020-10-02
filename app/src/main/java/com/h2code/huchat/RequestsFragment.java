@@ -69,11 +69,11 @@ public class RequestsFragment extends Fragment
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.exists()){
-                    if (dataSnapshot.hasChild("name")){
-                        currentUserName = dataSnapshot.child("name").getValue().toString();
-                    }
-                }
+ if (dataSnapshot.exists()){
+     if (dataSnapshot.hasChild("name")){
+         currentUserName = dataSnapshot.child("name").getValue().toString();
+     }
+ }
 
 
             }

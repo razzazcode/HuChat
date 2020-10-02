@@ -113,8 +113,18 @@ public class ContactsFragment extends Fragment
 
          final String retName = dataSnapshot.child("name").getValue().toString();
          final String retStatus = dataSnapshot.child("status").getValue().toString();
-         final String    retImage = dataSnapshot.child("image").getValue().toString();
 
+
+         final String[] retImage = {"default_image"};
+
+         if (dataSnapshot.hasChild("image"))
+         {
+
+             retImage[0] = dataSnapshot.child("image").getValue().toString();
+
+           //  retImage[0] = dataSnapshot.child("image").getValue().toString();
+             Picasso.get().load(retImage[0]).into(holder.profileImage);
+         }
 
 
 
@@ -184,7 +194,7 @@ else if (state.equals("offline"))
                  Intent profileIntent = new Intent(getContext(), ProfileActivity .class);
                  profileIntent.putExtra("visit_user_id", userIDs);
                  profileIntent.putExtra("visit_user_name", retName);
-                 profileIntent.putExtra("visit_image", retImage);
+                 profileIntent.putExtra("visit_image", retImage[0]);
                  startActivity(profileIntent);
              }
          });
@@ -228,14 +238,14 @@ else if (state.equals("offline"))
 
 
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
+      //  menu.clear();
 
 
         inflater.inflate(R.menu.searchfrag ,  menu);
         MenuItem menuItem = menu.findItem(R.id.SearchFragment);
         SearchView searchView = (SearchView) menuItem.getActionView();
 
-        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+      //  menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
         //  menuItem.setActionView(searchView);
 
 

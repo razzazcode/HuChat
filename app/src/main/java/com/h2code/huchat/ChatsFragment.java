@@ -85,12 +85,6 @@ public class ChatsFragment extends Fragment
 
 
 
-
-
-
-
-
-
     private void loadData(String s) {
 
             Query databasesearchReference =  ChatsRef.orderByChild("Contact")
@@ -213,15 +207,15 @@ public class ChatsFragment extends Fragment
 
 
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
+       // menu.clear();
 
 
        inflater.inflate(R.menu.searchfrag ,  menu);
         MenuItem menuItem = menu.findItem(R.id.SearchFragment);
         SearchView searchView = (SearchView) menuItem.getActionView();
 
-        menuItem.setShowAsAction
-  (MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    //    menuItem.setShowAsAction
+ // (MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItem.SHOW_AS_ACTION_IF_ROOM);
       //  menuItem.setActioniView(searchView);
 
 
