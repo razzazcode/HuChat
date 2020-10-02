@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -124,14 +126,12 @@ public class GroupsFragment extends Fragment
             }
         });
 
-
-
-
+/*
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
             {
-     currentGroupName = adapterView.getItemAtPosition(position).toString();
+                currentGroupName = adapterView.getItemAtPosition(position).toString();
 
                 GetCurrentGroupeCreatorId();
 
@@ -139,8 +139,10 @@ public class GroupsFragment extends Fragment
 
 
 
- }
-        });
+            }
+        }); */
+
+
 
 
         GroupesContactsOfAgroupetRef = FirebaseDatabase.getInstance().getReference().child("GroupesMainActivity")
@@ -169,7 +171,7 @@ public class GroupsFragment extends Fragment
         list_view22.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-
+        loadData("");
 
 
         return groupFragmentView;
@@ -195,7 +197,7 @@ public class GroupsFragment extends Fragment
 
 
 
-        list_view.setAdapter(arrayAdapter);
+    //    list_view.setAdapter(arrayAdapter);
 
 
         createNewGroupe= groupFragmentView.findViewById(R.id.createnewgroupe);
@@ -415,6 +417,8 @@ public class GroupsFragment extends Fragment
                         .setQuery(GroupesRequestsFragmentRef
                                 .child(currentUserID), Contacts.class)
                         .build();
+
+
 
 
         FirebaseRecyclerAdapter<Contacts, RequestsGropesViewHolder> adapter =
@@ -931,15 +935,143 @@ public class GroupsFragment extends Fragment
     }
 
 
+
     private void loadData(String s) {
 
+    //    Query databasesearchReference =  UserGroupesRef.orderByChild("Contact")
+      //          .startAt(s)
+      //          .endAt(s+"\uf8ff");
+
+
+        FirebaseRecyclerOptions<Contacts> optionsr =
+                new FirebaseRecyclerOptions.Builder<Contacts>()
+                        .setQuery(UserGroupesRef, Contacts.class)
+                        .build();
+
+
+        FirebaseRecyclerAdapter<Contacts, GroupesViewHolder> adapterr =
+    new FirebaseRecyclerAdapter<Contacts, GroupesViewHolder>(optionsr) {
+ @Override
+ protected void onBindViewHolder(@NonNull final GroupesViewHolder holder,
+                                 int position, @NonNull Contacts model)
+ {
+     final String selectedgrpName = getRef(position).getKey();
+     final String[] retImage = {"default_image"};
+
+     final String[] selectedgrpCreatorId = {"grpcreator"};
+
+     UserGroupesRef.child(selectedgrpName).addValueEventListener(new ValueEventListener() {
+         @Override
+         public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+   selectedgrpCreatorId[0] = snapshot.child("GroupeCreator").getValue().toString();
+
+
+
+         }
+
+         @Override
+         public void onCancelled(@NonNull DatabaseError error) {
+
+         }
+     });
+
+
+
+     generalGroupesRef.child(selectedgrpCreatorId[0]).child(selectedgrpName)
+    .child("CurrentGroupesettings").addValueEventListener(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot)
+         {
+             if (dataSnapshot.exists())
+             {
+                 if (dataSnapshot.hasChild("image"))
+   {
+       retImage[0] = dataSnapshot.child("image").getValue().toString();
+       Picasso.get().load(retImage[0]).into(holder.profileImage);
+   }
+
+   //final String retName = dataSnapshot.child("name").getValue().toString();
+   final String retStatus = dataSnapshot.child("status").getValue().toString();
+
+   holder.userName.setText(selectedgrpName);
+                 holder.userStatus.setText(retStatus);
+
+
+
+
+   holder.itemView.setOnClickListener(new View.OnClickListener() {
+       @Override
+        public void onClick(View view)
+    {
+        Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
+        groupChatIntent.putExtra("groupName" , selectedgrpName);
+
+
+
+
+        groupChatIntent.putExtra("GroupeCreatorID" , selectedgrpCreatorId[0]);
+
+        groupChatIntent.putExtra("CurrentUserName", CurrentUserName);
+
+        startActivity(groupChatIntent);
+    }
+           });
+       }
+   }
+
+   @Override
+   public void onCancelled(DatabaseError databaseError) {
+
+   }
+                        });
+                    }
+
+
+
+
+    @NonNull
+ @Override
+ public GroupesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
+ {
+     View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.users_display_layout, viewGroup, false);
+     return new GroupesViewHolder(view);
+ }
+                };
+
+        list_viewr.setAdapter(adapterr);
+        adapterr.startListening();
 
 
 
 
 
+    }
 
 
+
+    public static class  GroupesViewHolder extends RecyclerView.ViewHolder
+    {
+        CircleImageView profileImage;
+        TextView userStatus, userName;
+        ImageView onlineIcon;
+
+
+        public GroupesViewHolder(@NonNull View itemView)
+        {
+            super(itemView);
+
+            profileImage = itemView.findViewById(R.id.users_profile_image);
+            userStatus = itemView.findViewById(R.id.user_status);
+            userName = itemView.findViewById(R.id.user_profile_name);
+
+            onlineIcon = (ImageView) itemView.findViewById(R.id.user_online_status);
+
+
+
+
+        }
     }
 
 
