@@ -53,56 +53,59 @@ public class ChatsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+// Inflate the layout for this fragment
 
-        setHasOptionsMenu(true); // Add this!
-
-
-        PrivateChatsView = inflater.inflate(R.layout.fragment_chats, container, false);
+setHasOptionsMenu(true); // Add this!
 
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
-        ChatsRef = FirebaseDatabase.getInstance().getReference().child("Contacts").child(currentUserID);
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+PrivateChatsView = inflater.inflate(R.layout.fragment_chats, container, false);
 
 
-        chatsList = (RecyclerView) PrivateChatsView.findViewById(R.id.chats_list);
-        chatsList.setLayoutManager(new LinearLayoutManager(getContext()));
+mAuth = FirebaseAuth.getInstance();
+currentUserID = mAuth.getCurrentUser().getUid();
+ChatsRef = FirebaseDatabase.getInstance().getReference()
+        .child("Contacts").child(currentUserID);
+UsersRef = FirebaseDatabase.getInstance().getReference()
+        .child("Users");
 
 
-        loadData("");
+chatsList = (RecyclerView) PrivateChatsView.findViewById(R.id.chats_list);
+chatsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-
-
-
-
-        return PrivateChatsView;
-    }
+loadData("");
 
 
 
 
 
-    private void loadData(String s) {
 
-            Query databasesearchReference =  ChatsRef.orderByChild("Contact")
-                       .startAt(s)
-                    .endAt(s+"\uf8ff");
+     return PrivateChatsView;
+ }
 
 
-        FirebaseRecyclerOptions<Contacts> options =
-                new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(databasesearchReference, Contacts.class)
-                        .build();
 
 
-        FirebaseRecyclerAdapter<Contacts, ChatsViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Contacts, ChatsViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull final ChatsViewHolder holder, int position, @NonNull Contacts model)
-                    {
+
+ private void loadData(String s) {
+
+      Query databasesearchReference =  ChatsRef.orderByChild("Contact")
+                 .startAt(s)
+              .endAt(s+"\uf8ff");
+
+
+  FirebaseRecyclerOptions<Contacts> options =
+          new FirebaseRecyclerOptions.Builder<Contacts>()
+                  .setQuery(databasesearchReference, Contacts.class)
+                  .build();
+
+
+  FirebaseRecyclerAdapter<Contacts, ChatsViewHolder> adapter =
+          new FirebaseRecyclerAdapter<Contacts, ChatsViewHolder>(options) {
+
+  @Override
+  protected void onBindViewHolder(@NonNull final ChatsViewHolder holder, int position, @NonNull Contacts model)
+  {
      final String usersIDs = getRef(position).getKey();
      final String[] retImage = {"default_image"};
 

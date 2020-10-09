@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +32,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +61,7 @@ public class GroupsFragment extends Fragment
 
     private Button  createNewGroupe;
 
-    private DatabaseReference generalGroupesRef, UserGroupesRef , UsersRef
+    private DatabaseReference generalGroupesRefSN, currentUserGroupesRef, UsersRef
             , GroupesContactsOfAgroupetRef ,GroupesRequestsFragmentRef ;
 
     private String CurrentUserName , currentUserID  , currentGroupName , CurrentGroupeCreatorId  ;
@@ -88,11 +86,11 @@ public class GroupsFragment extends Fragment
 
 
 
-        generalGroupesRef = FirebaseDatabase.getInstance().getReference()
+        generalGroupesRefSN = FirebaseDatabase.getInstance().getReference()
                 .child("GroupesMainActivity").child("Groupes");
 
 
-        UserGroupesRef = FirebaseDatabase.getInstance().getReference()
+        currentUserGroupesRef = FirebaseDatabase.getInstance().getReference()
                 .child("Users").child(currentUserID).child("OwnGrpName");
 
         UsersRef = FirebaseDatabase.getInstance().getReference()
@@ -105,22 +103,22 @@ public class GroupsFragment extends Fragment
         GetCurrentUserUserName();
 
 
-        IntializeFields();
+IntializeFields();
 
 
-        RetrieveAndDisplayGroups();
-
-
-
+  RetrieveAndDisplayGroups();
 
 
 
-        createNewGroupe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
 
-                RequestNewGroup();
+
+  createNewGroupe.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+
+
+          RequestNewGroup();
 
 
             }
@@ -128,28 +126,29 @@ public class GroupsFragment extends Fragment
 
 /*
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
-            {
-                currentGroupName = adapterView.getItemAtPosition(position).toString();
+     @Override
+     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+     {
+  currentGroupName = adapterView.getItemAtPosition(position).toString();
 
-                GetCurrentGroupeCreatorId();
-
-
-
-
-
-            }
-        }); */
+  GetCurrentGroupeCreatorId();
 
 
 
 
-        GroupesContactsOfAgroupetRef = FirebaseDatabase.getInstance().getReference().child("GroupesMainActivity")
-                .child("Groupes");
+
+     }
+ }); */
 
 
-        GroupesRequestsFragmentRef = FirebaseDatabase.getInstance().getReference()
+
+
+ GroupesContactsOfAgroupetRef = FirebaseDatabase.getInstance().getReference()
+         .child("GroupesMainActivity")
+         .child("Groupes");
+
+
+ GroupesRequestsFragmentRef = FirebaseDatabase.getInstance().getReference()
                 .child("GroupesMainActivity").child("GroupesRequests");
 
 
@@ -211,7 +210,7 @@ public class GroupsFragment extends Fragment
 
     private void RetrieveAndDisplayGroups()
     {
-        UserGroupesRef.addValueEventListener(new ValueEventListener() {
+        currentUserGroupesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -299,12 +298,12 @@ public class GroupsFragment extends Fragment
 
       //  GettingCreatorUserName();
 
-         generalGroupesRef.child(currentUserID).child(groupName).child("GroupeName").setValue(groupName);
+         generalGroupesRefSN.child(currentUserID).child(groupName).child("GroupeName").setValue(groupName);
 
-        generalGroupesRef.child(currentUserID).child(groupName).child("GroupeCreator")
+        generalGroupesRefSN.child(currentUserID).child(groupName).child("GroupeCreator")
                 .setValue(currentUserID);
 
-        generalGroupesRef.child(currentUserID).child(groupName).child("GroupeCreatorUserName")
+        generalGroupesRefSN.child(currentUserID).child(groupName).child("GroupeCreatorUserName")
                 .setValue(CurrentUserName)
 
 
@@ -321,8 +320,8 @@ public class GroupsFragment extends Fragment
                 });
 
 
-        UserGroupesRef.child(groupName).child("GroupeName").setValue(groupName);
-        UserGroupesRef.child(groupName).child("GroupeCreator").setValue(currentUserID);
+        currentUserGroupesRef.child(groupName).child("GroupeName").setValue(groupName);
+        currentUserGroupesRef.child(groupName).child("GroupeCreator").setValue(currentUserID);
 
     }
 
@@ -938,19 +937,19 @@ public class GroupsFragment extends Fragment
 
     private void loadData(String s) {
 
-    //    Query databasesearchReference =  UserGroupesRef.orderByChild("Contact")
-      //          .startAt(s)
-      //          .endAt(s+"\uf8ff");
+//    Query databasesearchReference =  UserGroupesRef.orderByChild("Contact")
+  //          .startAt(s)
+  //          .endAt(s+"\uf8ff");
 
 
-        FirebaseRecyclerOptions<Contacts> optionsr =
-                new FirebaseRecyclerOptions.Builder<Contacts>()
-                        .setQuery(UserGroupesRef, Contacts.class)
-                        .build();
+ FirebaseRecyclerOptions<Contacts> optionsr =
+         new FirebaseRecyclerOptions.Builder<Contacts>()
+                 .setQuery(currentUserGroupesRef, Contacts.class)
+                 .build();
 
 
-        FirebaseRecyclerAdapter<Contacts, GroupesViewHolder> adapterr =
-    new FirebaseRecyclerAdapter<Contacts, GroupesViewHolder>(optionsr) {
+     FirebaseRecyclerAdapter<Contacts, GroupesViewHolder> adapterr =
+ new FirebaseRecyclerAdapter<Contacts, GroupesViewHolder>(optionsr) {
  @Override
  protected void onBindViewHolder(@NonNull final GroupesViewHolder holder,
                                  int position, @NonNull Contacts model)
@@ -960,14 +959,60 @@ public class GroupsFragment extends Fragment
 
      final String[] selectedgrpCreatorId = {"grpcreator"};
 
-     UserGroupesRef.child(selectedgrpName).addValueEventListener(new ValueEventListener() {
+     currentUserGroupesRef.child(selectedgrpName).addValueEventListener(new ValueEventListener() {
          @Override
          public void onDataChange(@NonNull DataSnapshot snapshot) {
 
 
    selectedgrpCreatorId[0] = snapshot.child("GroupeCreator").getValue().toString();
 
+             generalGroupesRefSN.child(selectedgrpCreatorId[0]).child(selectedgrpName)
+                     .child("CurrentGroupesettings").addValueEventListener(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(DataSnapshot dataSnapshot)
+                 {
+                     if (dataSnapshot.exists())
+                     {
+                         if (dataSnapshot.hasChild("image"))
+                         {
+                             retImage[0] = dataSnapshot.child("image").getValue().toString();
+                             Picasso.get().load(retImage[0]).into(holder.profileImage);
+                         }
 
+                         //final String retName = dataSnapshot.child("name").getValue().toString();
+                         final String retStatus = dataSnapshot.child("status").getValue().toString();
+
+                         holder.userName.setText(selectedgrpName);
+                         holder.userStatus.setText(retStatus);
+
+
+
+
+                         holder.itemView.setOnClickListener(new View.OnClickListener() {
+                             @Override
+                             public void onClick(View view)
+                             {
+                                 Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
+                                 groupChatIntent.putExtra("groupName" , selectedgrpName);
+
+
+
+
+                                 groupChatIntent.putExtra("GroupeCreatorID" , selectedgrpCreatorId[0]);
+
+                                 groupChatIntent.putExtra("CurrentUserName", CurrentUserName);
+
+                                 startActivity(groupChatIntent);
+                             }
+                         });
+                     }
+                 }
+
+                 @Override
+                 public void onCancelled(DatabaseError databaseError) {
+
+                 }
+             });
 
          }
 
@@ -979,53 +1024,7 @@ public class GroupsFragment extends Fragment
 
 
 
-     generalGroupesRef.child(selectedgrpCreatorId[0]).child(selectedgrpName)
-    .child("CurrentGroupesettings").addValueEventListener(new ValueEventListener() {
-         @Override
-         public void onDataChange(DataSnapshot dataSnapshot)
-         {
-             if (dataSnapshot.exists())
-             {
-                 if (dataSnapshot.hasChild("image"))
-   {
-       retImage[0] = dataSnapshot.child("image").getValue().toString();
-       Picasso.get().load(retImage[0]).into(holder.profileImage);
-   }
 
-   //final String retName = dataSnapshot.child("name").getValue().toString();
-   final String retStatus = dataSnapshot.child("status").getValue().toString();
-
-   holder.userName.setText(selectedgrpName);
-                 holder.userStatus.setText(retStatus);
-
-
-
-
-   holder.itemView.setOnClickListener(new View.OnClickListener() {
-       @Override
-        public void onClick(View view)
-    {
-        Intent groupChatIntent = new Intent(getContext(), GroupeChat2.class);
-        groupChatIntent.putExtra("groupName" , selectedgrpName);
-
-
-
-
-        groupChatIntent.putExtra("GroupeCreatorID" , selectedgrpCreatorId[0]);
-
-        groupChatIntent.putExtra("CurrentUserName", CurrentUserName);
-
-        startActivity(groupChatIntent);
-    }
-           });
-       }
-   }
-
-   @Override
-   public void onCancelled(DatabaseError databaseError) {
-
-   }
-                        });
                     }
 
 
